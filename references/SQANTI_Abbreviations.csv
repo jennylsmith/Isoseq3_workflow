@@ -1,0 +1,12 @@
+Term,Explanation
+FSM,Full Splice Match. PacBio transcripts matching a reference transcript at all splice junctions or PacBio monoexon transcripts matching a monoexon reference
+ISM,"Incomplete Splice Match. PacBio transcripts matching consecutive, but not all, of the splice junctions of a reference transcript or PacBio monoexon transcripts matching a multiexon reference"
+UTR3 Fragment,Subtype of ISM transcripts that are contained by 95% or more in the 3’ UTR of a reference
+NIC,Novel In Catalog. PacBio novel transcripts that contain new combinations of known Splice Junctions or PacBio novel transcripts that contain novel junctions formed from already annotated donors and acceptors
+NNC,Novel Not in Catalog. PacBio novel transcripts that contain novel junctions formed from novel donors and/or acceptors
+Genic intron,PacBio novel transcripts lying entirely within the boundaries of an annotated intron. They are considered in the manuscript novel genes
+Intergenic,PacBio novel transcripts lying entirely out of the boundaries of any annotated locus. They are considered in the manuscript novel genes.
+Genic Genomic,PacBio novel transcripts overlapping partially an annotated intron and an annotated exon
+Fusion Transcripts,PacBio novel transcripts overlapping partially at least two different loci
+Antisense,PacBio novel transcripts overlapping at least partially an annotated transcript in the contrary strand
+MET,Most Expressed Transcript of a gene. The transcript with the highest mean expression across samples for a given gene

@@ -1,0 +1,62 @@
+From:	Ries, Rhonda E
+Sent:	Wednesday, January 9, 2019 2:00 PM
+To:	Smith, Jenny L
+Subject:	FW: Pacbio SMRTbell libraries for sequencing
+Attachments:	Underwood_IsoSequel.doc; Underwood_IsoSequel_page6.docx; 
+Underwood_IsoSequel_page5.docx; Underwood_IsoSequel_page4.docx; 
+Underwood_IsoSequel_page3.docx; Underwood_IsoSequel_page2.doc; 
+libraries_submitted_to_FHCRC_genomics_core_for_PacBio.xlsx
+
+Here is what Jason submitted to the genomics core (not sure why there are 6 indiv. pages!).  I’ve taken 
+the library ids (which are really just the Reg# and .1 or .4 to indicate the size of preps) and made a small 
+spreadsheet with their fusions so you have that info.
+
+Let me know if you have any questions,
+
+RR
+
+From: Jason Underwood <junderwood@pacificbiosciences.com>  
+Sent: Friday, November 30, 2018 5:09 PM 
+To: genomics <genomics@fhcrc.org>; Marty, Andy <jamarty@fredhutch.org>; Meshinchi, Soheil 
+<smeshinc@fredhutch.org>; Ries, Rhonda E <rries@fredhutch.org> 
+Subject: Pacbio SMRTbell libraries for sequencing
+
+Hi Andy,  I’m happy to hear that our samples can go on next week!  Today I completed and QC'ed more 
+libraries for the pediatric AML IsoSeq project (for CBF-GLIS samples, Soheil and Rhonda) and I just 
+handed those off to the core.  Andy, I placed them in that freezer to the left in a tip box and those 
+represent samples 11-12 to add to 1-10 of the prior ones you already have in hand.
+
+Sorry but I could not figure out how to add additional pages to the sequence submission sheet so there 
+are 6 separate pages.
+
+Naming explanation:  
+I previously gave you 2 sets of 8-strip tubes that are labeled 1-10 on them.  (4 strips in all)   In those 
+strips are the same samples 1-10, but a different size fraction of each sample.  (0.4X AMPure cut versus 
+1X AMPure cut)  The strip tubes should be marked with whether they are the 1x or 0.4X fractions.    For 
+the Hutch sample sheets, I’ve numbered the samples the same way but have added either .1 or a .4 to 
+the patient sample name to denote whether I am talking about the 1x or 0.4x fraction.  You’ll also note 
+that I have skipped sample 6 on the sheets.  We’d like to skip sequencing that same for now because the 
+input RNA was not as high of quality so let’s wait. 
+
+For the new samples. there’s an 8-strip tube in your -20 freezer that has 3 samples in it.  It’s 11.1 and 
+12.1 and 12.4.  Unfortunately, the 0.4X fraction for 11 failed but I will get you a replacement sample in a 
+couple weeks.  (This amount of seq should keep the Sequel busy for a long time!)
+
+For all of these samples, we would like the v3 chemistry and the 20 hours movies with the preextension 
+time of 2 hours to get things into rolling circle.  You can consult with Kristen for more guidance, but in 
+the hands of the UW PacBio facility running IsoSeq on v3, these are running pretty well with on-plate 
+concentrations of ~8pM.   If possible, I'd like to start running with the normal bone marrow samples 
+(NBM: sample 10, both 0.4x and 1x fractions) so that we can get a look at what we are up against with 
+isoform complexity in a normal sample.  I’ve requested 2 SMRTcells of each size fraction of this sample, 
+while 1 each for the others.  You could perform the sample titration with those with a 6pM and 8pM on 
+plate of each or something in that ballpark.   The AML samples were prepped in parallel and have similar 
+size distributions, so I feel like if we can nail down loading conc. with the NBM, we should be good to 
+go.  Single molecule can do crazy things, so you never know, but that’s a pretty good educated guess. 
+
+I’m out of town next week on vacation but will have email.  My twin girls turned 5 years old today and 
+we’re celebrating with some fun in the sun in Mexico. 
+
+Jason
+
+
+
