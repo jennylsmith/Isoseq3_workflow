@@ -15,7 +15,7 @@ We used 96 barcoded oligonucleotides for the RT-PCR step, to provide a means for
 
 
 #Resources and References
-https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/Tutorial:-Installing-and-Running-Iso-Seq-3-using-Conda
-https://github.com/PacificBiosciences/IsoSeq3/blob/master/README_v3.1.md
-https://github.com/Magdoll/cDNA_Cupcake
-https://github.com/Magdoll/SQANTI2
+- https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/Tutorial:-Installing-and-Running-Iso-Seq-3-using-Conda
+- https://github.com/PacificBiosciences/IsoSeq3/blob/master/README_v3.1.md
+- https://github.com/Magdoll/cDNA_Cupcake
+- https://github.com/Magdoll/SQANTI2
