@@ -24,4 +24,4 @@ do
  #done
 
  printf "$(dirname $file),$(basename $file),$reg\n"
-done >> Sample_ID_Map.txt
+done >> Sample_ID_Map.csv
