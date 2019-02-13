@@ -1,17 +1,17 @@
-Run_ID,Movie_ID,Reg.,AmpureBeads_Conc,Description,Comments
-r54247_20190124_225620/3_C01,m54247_190126_163232.subreadset.xml,816618,1,Cell3,
-r54228_20190131_194324/3_C01,m54228_190202_123808.subreadset.xml,816618,0.4,Cell3,
-r54247_20190124_225620/4_D01,m54247_190127_125335.subreadset.xml,819011,1,Cell4,
-r54228_20190131_194324/4_D01,m54228_190203_090029.subreadset.xml,819011,0.4,Cell4,
-r54247_20190131_004144/2_B01,m54247_190131_211440.subreadset.xml,826017,1,Cell2,
-r54247_20190131_004144/4_D01,m54247_190202_135646.subreadset.xml,829530,1,Cell4,
-r54247_20190124_225620/1_A01,m54247_190124_235009.subreadset.xml,846361,1,Cell1,
-r54228_20190131_194324/1_A01,m54228_190131_195338.subreadset.xml,846361,0.4,Cell1,NOTE: the Sample ID was mis-typed in the subreads.xml file. Need to Follow-up and check on sample. 
-r54247_20190124_225620/2_B01,m54247_190125_201139.subreadset.xml,846816,1,Cell2,
-r54228_20190131_194324/2_B01,m54228_190201_161538.subreadset.xml,846816,0.4,Cell2,
-r54247_20190131_004144/1_A01,m54247_190131_005315.subreadset.xml,848724,1,Cell1,
-r54247_20190131_004144/3_C01,m54247_190201_173538.subreadset.xml,857786,1,Cell3,
-r54228_20181211_214342/1_A01,m54228_181211_220100.subreadset.xml,Sample10,1,NBM_1X_6p,
-r54228_20181211_214342/2_B01,m54228_181212_182227.subreadset.xml,Sample10,1,NBM_1X_8p,
-r54228_20181211_214342/3_C01,m54228_181213_144331.subreadset.xml,Sample10,0.4,NBM_0.4X_8p,
-r54228_20181211_214342/4_D01,m54228_181214_110428.subreadset.xml,Sample10,0.4,NBM_0.4X_6p,
+"","Run_ID","Movie_ID","Reg.","AmpureBeads_Conc","Sample_Info","Sample_Number","Description","Comments"
+"1","r54247_20190124_225620/3_C01","m54247_190126_163232.subreadset.xml","816618",1,"RUNX1-RUNX1T1 w/ KIT mutation","sample3","Cell3",""
+"2","r54228_20190131_194324/3_C01","m54228_190202_123808.subreadset.xml","816618",0.4,"RUNX1-RUNX1T1 w/ KIT mutation","sample3","Cell3",""
+"3","r54247_20190124_225620/4_D01","m54247_190127_125335.subreadset.xml","819011",1,"FUS-ERG","sample4","Cell4",""
+"4","r54228_20190131_194324/4_D01","m54228_190203_090029.subreadset.xml","819011",0.4,"FUS-ERG","sample4","Cell4",""
+"5","r54247_20190131_004144/2_B01","m54247_190131_211440.subreadset.xml","826017",1,"NUP98-NSD1; FLT3 ITD Hi AR","sample7","Cell2",""
+"6","r54247_20190131_004144/4_D01","m54247_190202_135646.subreadset.xml","829530",1,"NUP98-NSD1; FLT3 ITD Hi AR","sample9","Cell4",""
+"7","r54247_20190124_225620/1_A01","m54247_190124_235009.subreadset.xml","846361",1,"KMT2A-LASP1","sample1","Cell1",""
+"8","r54228_20190131_194324/1_A01","m54228_190131_195338.subreadset.xml","846361",0.4,"KMT2A-LASP1","sample1","Cell1","NOTE: the Sample ID was mis-typed in the subreads.xml file. Need to Follow-up and check on sample. "
+"9","r54247_20190124_225620/2_B01","m54247_190125_201139.subreadset.xml","846816",1,"KMT2A-MLLT3","sample2","Cell2",""
+"10","r54228_20190131_194324/2_B01","m54228_190201_161538.subreadset.xml","846816",0.4,"KMT2A-MLLT3","sample2","Cell2",""
+"11","r54247_20190131_004144/1_A01","m54247_190131_005315.subreadset.xml","848724",1,"RUNX1-RUNX1T1 w/ KIT mutation","sample5","Cell1",""
+"12","r54247_20190131_004144/3_C01","m54247_190201_173538.subreadset.xml","857786",1,"DEK-NUP214; FLT3 ITD Hi AR","sample8","Cell3",""
+"13","r54228_20181211_214342/1_A01","m54228_181211_220100.subreadset.xml","Sample10",1,"Normal Bone Marrow","sample10","NBM_1X_6p",""
+"14","r54228_20181211_214342/2_B01","m54228_181212_182227.subreadset.xml","Sample10",1,"Normal Bone Marrow","sample10","NBM_1X_8p",""
+"15","r54228_20181211_214342/3_C01","m54228_181213_144331.subreadset.xml","Sample10",0.4,"Normal Bone Marrow","sample10","NBM_0.4X_8p",""
+"16","r54228_20181211_214342/4_D01","m54228_181214_110428.subreadset.xml","Sample10",0.4,"Normal Bone Marrow","sample10","NBM_0.4X_6p",""
