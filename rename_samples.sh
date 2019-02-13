@@ -23,5 +23,5 @@ do
   #echo ${reg}_$res
  #done
 
- printf "$file\t$reg\n"
-done >> Sample_ID_map.txt
+ printf "$(dirname $file),$(basename $file),$reg\n"
+done >> Sample_ID_Map.txt
