@@ -17,12 +17,12 @@ findpath () {
 	find $1 -type f -regex "^.+subreads\.bam$"
 }
 
-#Loop through each directory
+#Loop through each directory with raw SMRT-seq data
 for dir in $(ls -1d r5* )
 do
 	subreads_bam=$( findpath $dir )
 
-	#Check the MD5sums
+	#create md5 sums for each subreads bam. 
 	for bam in $(echo $subreads_bam)
 	do
 		lastDir=$(dirname $bam | uniq)
