@@ -28,4 +28,5 @@ We used 96 barcoded oligonucleotides for the RT-PCR step, to provide a means for
 - https://github.com/Magdoll/cDNA_Cupcake
 - https://github.com/Magdoll/SQANTI2
 - https://pacbiofileformats.readthedocs.io/en/3.0/BAM.html
+- https://github.com/PacificBiosciences/PacBioFileFormats/wiki/BAM-recipes 
 
