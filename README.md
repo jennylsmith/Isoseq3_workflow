@@ -13,11 +13,11 @@ We used 96 barcoded oligonucleotides for the RT-PCR step, to provide a means for
 3.
 
 ### Post-IsoSeq3 workflow
-1. Align the *hq-transcripts.fasta files with GMAP-GSNAP
-2. Sort/index the bams 
+1. Align the *hq-transcripts.fastq files with minimap2
+2. Sort/index the aligned BAM files 
 3. Use Cupcake ToFu to collapse the isoforms based on alignment coords
 4. Use Cupcake ToFu to Calculate abundance of non-redundant isoforms
-5. Run SQANTI2 using the unique transcripts from step #3 (*-hq_transcripts.collapsed.rep.fq )
+5. Run SQANTI2 using the unique transcripts from step #3 (*-hq_transcripts.collapsed.rep.fq)
 
 
 ## Resources and References
