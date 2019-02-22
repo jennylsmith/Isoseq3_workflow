@@ -39,6 +39,20 @@ ZMWs above all thresholds (B) : 1412342 (73%)
 ZMWs below any threshold  (C) : 518010 (27%)
 ```
 
+2. Combine the LIMA demux output into a `consensusreadset`
+
+```
+ls output.primer_5p--BC0*bam|xargs echo "dataset create --type ConsensusReadSet --name Jenny_4cell_FL Jenny_4cell_FL.consensusreadset.xml  " > cmd
+bash cmd
+```
+
+3. Run IsoSeq3
+
+```
+isoseq3 refine Jenny_4cell_FL.consensusreadset.xml barcodes.fasta flnc.bam
+```
+(to be continued)
+
 
 ## Resources and References
 
