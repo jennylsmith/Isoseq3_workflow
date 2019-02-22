@@ -20,6 +20,26 @@ We used 96 barcoded oligonucleotides for the RT-PCR step, to provide a means for
 5. Run SQANTI2 using the unique transcripts from step #3 (*-hq_transcripts.collapsed.rep.fq)
 
 
+### Example Workflow (Liz)
+
+Liz uses 4 cells to demonstrate how to first run LIMA and IsoSeq3 on combined cells (for higher throughput) and later demultiplex into per-sample isoform counts.
+
+1. Combine the CCS into a `consensusreadset` and run LIMA
+
+```
+# lima 1.8.0 (commit v1.8.0)
+dataset create --type ConsensusReadSet --name Jenny_4cell Jenny_4cell.consensusreadset.xml m54228_181211_220100.ccs.bam m54228_181214_110428.ccs.bam m54228_190201_161538.ccs.bam m54247_190125_201139.ccs.bam
+lima --isoseq --dump-clips Jenny_4cell.consensusreadset.xml barcodes.fasta output.bam
+```
+
+Validation `output.lima.summary`
+```
+ZMWs input                (A) : 1930352
+ZMWs above all thresholds (B) : 1412342 (73%)
+ZMWs below any threshold  (C) : 518010 (27%)
+```
+
+
 ## Resources and References
 
 - https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki
