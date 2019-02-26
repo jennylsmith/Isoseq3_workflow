@@ -34,7 +34,6 @@ samp=$(basename ${subread_bam%.subreads.bam} ) #if given a full file path for $1
 
 echo $subread_bam
 echo $samp
-#Run CCS algorithm
-# --reportFile "${samp}.ccs_report.txt" #reportFile is not recognized? yet all mine got overwritten....
 
+#Run CCS algorithm
 ccs  $subread_bam ${samp}.ccs.bam --reportFile ${samp}_ccs_report.txt --noPolish --minPasses 1 --numThreads 16
