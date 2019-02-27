@@ -1,6 +1,6 @@
 # Isoseq3_workflow
 
-This is a custom workflow for the PacBio Isoseq3 method, which is a full-length RNA Sequencing methodology that can sequence transcripts ranging from 10 kb and up. 
+This is a custom PacBio Isoseq3 workflow, which is a full-length RNA Sequencing methodology that can sequence transcripts ranging from 10 kb and up. 
 
 We have a total of 12 (11 AML, 1 Normal Bone Marrow) different biological samples sequenced across 26 SMRT-cells.  There are 4 SMRT-cells for the noraml bone marrow (NBM) sample.  Each AML sample is sequenced across 2 SMRT-cells (a large cDNA prep on 1 cell, and small cDNA prep on the 2nd cell).
 
