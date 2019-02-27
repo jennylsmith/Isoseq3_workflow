@@ -2,9 +2,9 @@
 
 This is a custom PacBio Isoseq3 workflow, which is a full-length RNA Sequencing methodology that can sequence transcripts ranging from 10 kb and up. 
 
-We have a total of 12 (11 AML, 1 Normal Bone Marrow) different biological samples sequenced across 26 SMRT-cells.  There are 4 SMRT-cells for the noraml bone marrow (NBM) sample.  Each AML sample is sequenced across 2 SMRT-cells (a large cDNA prep on 1 cell, and small cDNA prep on the 2nd cell).
+We have a total of 12 (11 AML, 1 Normal Bone Marrow) biological samples sequenced across 26 SMRT-cells.  There are 4 SMRT-cells for the noraml bone marrow (NBM) sample. Each AML sample is sequenced across 2 SMRT-cells (a large cDNA prep on 1 cell, and small cDNA prep on the 2nd cell).
 
-We used 96 barcoded oligonucleotides for the RT-PCR step, to provide a means for PCR duplicate detection. Each SMRT-cell contains a single sample's library (not multiplexed by sample).
+We used 96 barcoded oligonucleotides for the RT-PCR step during library preparation, to provide a means for PCR duplicate detection. Each SMRT-cell contains a single sample's library (not multiplexed by sample).
 
 
 ## General Workflow
@@ -15,7 +15,7 @@ The next iteration will use Cromwell Workflow Management System to improve the e
 
 ### IsoSeq3
 
-1. CCS (Circular Consensus Sequence) generation for each indivual movie. 
+1. CCS (Circular Consensus Sequence) generation for each individual movie. 
 
 ```
 for bam in $(ls -1 *.subreads.bam) 
