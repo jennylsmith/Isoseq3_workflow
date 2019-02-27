@@ -29,7 +29,7 @@ done
    - This will allow one to combine multiple movies in the `lima` command  in order to remove 5' and 3' primers and demultiplex barcoded samples. 
 
 3. Use the `lima` command on the combined .ccs.bam files.
-   - The .ccs.bams are listed in the .xml file from step 2 and specifiy to `lima` the location of the .ccs.bam files 
+   - The .ccs.bams are listed in the .xml file from step 2 and specifiy to `lima` the location of the .ccs.bam files. The actual merging/combining of the .ccs.bam files are handled by `lima`.  
 
 4. Create a ConsensusReadSet from the output of `lima` which will help improve transcript recovery in the later clustering steps. 
 
