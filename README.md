@@ -25,19 +25,19 @@ done
 ```
 
 2. Create a ConsensusReadSet of each movie's ccs.bam file. Steps 2-5 are completed in a single batch script. 
-- This creates an xml file which provides the instructions on which datasets to include in a particular command. 
-- This will allow one to combine multiple movies in the `lima` command  in order to remove 5' and 3' primers and demultiplex barcoded samples. 
+   - This creates an xml file which provides the instructions on which datasets to include in a particular command. 
+   - This will allow one to combine multiple movies in the `lima` command  in order to remove 5' and 3' primers and demultiplex barcoded samples. 
 
 3. Use the `lima` command on the combined .ccs.bam files.
-- The .ccs.bams are listed in the .xml file from step 2 and specifiy to `lima` the location of the .ccs.bam files 
+   - The .ccs.bams are listed in the .xml file from step 2 and specifiy to `lima` the location of the .ccs.bam files 
 
 4. Create a ConsensusReadSet from the output of `lima` which will help improve transcript recovery in the later clustering steps. 
 
 5. Use `isoseq3 refine` to remove polyA tails and artificial concatemers from the combined demultiplexed bams produced by `lima`. 
-- The refine step produces the full-length, non-concatemer (FLNC) reads. 
-- The bam files can be listed from the command line - in this workflow, I assume all .ccs.bams in the currenty working directory will be used. 
-- You will need the barcode and primer sequences used in the library prep in fasta format for this step. In this workflow, the barcodes fasta file is aptly named `barcodes.fasta`. 
-- The prefix is simply a string to identify your run like "test1", or "AML". 
+   - The refine step produces the full-length, non-concatemer (FLNC) reads. 
+   - The bam files can be listed from the command line - in this workflow, I assume all .ccs.bams in the currenty working directory will be used. 
+   - You will need the barcode and primer sequences used in the library prep in fasta format for this step. In this workflow, the barcodes fasta file is aptly named `barcodes.fasta`. 
+   - The prefix is simply a string to identify your run like "test1", or "AML". 
 
 ```
 ccs_bams=$(ls *.ccs.bam)
@@ -48,9 +48,9 @@ sbatch Isoseq3_lima_primerRemoval.sh $ccs_bams barcodes.fasta $prefix
 
 6. Clustering of the FLNC reads in `isoseq3 cluster` 
 
-- clustering is the initial isoform-level clustering of full-length reads. This is the step which requires more power for isoform detection and thus, why combining as many samples in the initial steps 2-5 were necessary. 
-- Iso-Seq 3 requires at least **two FLNC reads** to b clustered at the isoform level
-- The two reads must *A)* Differ less than 100 bp on the 5’ end, *B)*  Differ less than 30 bp on the 3’ end, and *c)* Have no internal gaps that exceed 10 bp to be clustered. 
+   - clustering is the initial isoform-level clustering of full-length reads. This is the step which requires more power for isoform detection and thus, why combining as many samples in the initial steps 2-5 were necessary. 
+   - Iso-Seq 3 requires at least **two FLNC reads** to b clustered at the isoform level
+   - The two reads must *A)* Differ less than 100 bp on the 5’ end, *B)*  Differ less than 30 bp on the 3’ end, and *c)* Have no internal gaps that exceed 10 bp to be clustered. 
 
 
 ### Post-IsoSeq3 workflow
