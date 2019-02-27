@@ -1,18 +1,60 @@
 # Isoseq3_workflow
 
+This is a custom workflow for the PacBio Isoseq3 method, which is a full-length RNA Sequencing methodology that can sequence transcripts ranging from 10 kb and up. 
 
-We have a total of 12 (11 AML, 1 Normal Bone Marrow) different biological samples to be sequenced across 26 SMRT-cells.  There are 4 SMRT-cells for the NBM.  Each AML sample is sequenced across 2 SMRT-cells (a large cDNA prep on 1 cell, and small cDNA prep on the 2nd cell).
+We have a total of 12 (11 AML, 1 Normal Bone Marrow) different biological samples sequenced across 26 SMRT-cells.  There are 4 SMRT-cells for the noraml bone marrow (NBM) sample.  Each AML sample is sequenced across 2 SMRT-cells (a large cDNA prep on 1 cell, and small cDNA prep on the 2nd cell).
 
 We used 96 barcoded oligonucleotides for the RT-PCR step, to provide a means for PCR duplicate detection. Each SMRT-cell contains a single sample's library (not multiplexed by sample).
 
+
 ## General Workflow
 
+This workflow has been initially designed to be run using the SLURM job scheduler with an on-premise high performance compute cluster (HPC). 
+
+The next iteration will use Cromwell Workflow Management System to improve the efficiency and reprodicibility of the workflow. 
+
 ### IsoSeq3
-1. ccs generation
-2. demultiplex the barcoded primers
-3.
+
+1. CCS (Circular Consensus Sequence) generation for each indivual movie. 
+
+```
+for bam in $(ls -1 *.subreads.bam) 
+do
+  sbatch Isoseq3_ccs_generation.sh $bam
+done
+```
+
+2. Create a ConsensusReadSet of each movie's ccs.bam file. Steps 2-5 are completed in a single batch script. 
+- This creates an xml file which provides the instructions on which datasets to include in a particular command. 
+- This will allow one to combine multiple movies in the `lima` command  in order to remove 5' and 3' primers and demultiplex barcoded samples. 
+
+3. Use the `lima` command on the combined .ccs.bam files.
+- The .ccs.bams are listed in the .xml file from step 2 and specifiy to `lima` the location of the .ccs.bam files 
+
+4. Create a ConsensusReadSet from the output of `lima` which will help improve transcript recovery in the later clustering steps. 
+
+5. Use `isoseq3 refine` to remove polyA tails and artificial concatemers from the combined demultiplexed bams produced by `lima`. 
+- The refine step produces the full-length, non-concatemer (FLNC) reads. 
+- The bam files can be listed from the command line - in this workflow, I assume all .ccs.bams in the currenty working directory will be used. 
+- You will need the barcode and primer sequences used in the library prep in fasta format for this step. In this workflow, the barcodes fasta file is aptly named `barcodes.fasta`. 
+- The prefix is simply a string to identify your run like "test1", or "AML". 
+
+```
+ccs_bams=$(ls *.ccs.bam)
+prefix="Test"
+sbatch Isoseq3_lima_primerRemoval.sh $ccs_bams barcodes.fasta $prefix 
+
+```
+
+6. Clustering of the FLNC reads in `isoseq3 cluster` 
+
+- clustering is the initial isoform-level clustering of full-length reads. This is the step which requires more power for isoform detection and thus, why combining as many samples in the initial steps 2-5 were necessary. 
+- Iso-Seq 3 requires at least **two FLNC reads** to b clustered at the isoform level
+- The two reads must *A)* Differ less than 100 bp on the 5’ end, *B)*  Differ less than 30 bp on the 3’ end, and *c)* Have no internal gaps that exceed 10 bp to be clustered. 
+
 
 ### Post-IsoSeq3 workflow
+
 1. Align the *hq-transcripts.fastq files with minimap2
 2. Sort/index the aligned BAM files 
 3. Use Cupcake ToFu to collapse the isoforms based on alignment coords
@@ -63,4 +105,6 @@ isoseq3 refine Jenny_4cell_FL.consensusreadset.xml barcodes.fasta flnc.bam
 - https://github.com/Magdoll/SQANTI2
 - https://pacbiofileformats.readthedocs.io/en/3.0/BAM.html
 - https://github.com/PacificBiosciences/PacBioFileFormats/wiki/BAM-recipes 
+- http://files.pacb.com/software/smrtanalysis/2.2.0/doc/smrtportal/help/!SSL!/Webhelp/Portal_PacBio_Glossary.htm
+
 
