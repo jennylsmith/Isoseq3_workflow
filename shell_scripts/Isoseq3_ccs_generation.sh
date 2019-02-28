@@ -15,12 +15,13 @@ source /app/Lmod/lmod/lmod/init/bash
 
 #Jenny Smith
 #Run Isoseq3 CCS (consensus cluster sequence)
+#Each individual movie needs to have ccs.bam created.
+
 
 #set-up enviornment
 module purge
 export PATH=~/anaconda2/bin:$PATH
 source activate anaconda2.7
-
 
 
 #Define File Locations
