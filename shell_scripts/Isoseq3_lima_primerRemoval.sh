@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --partition=campus
+#SBATCH --partition=largenode
 #SBATCH -n 1
-#SBATCH -c 4
-#SBATCH --mem=30G
+#SBATCH -c 16
+#SBATCH --mem=62G
 #SBATCH -o lima.%j.out
 #SBATCH -e lima.%j.stderr
 #SBATCH -t 0-1
@@ -16,8 +16,11 @@ source /app/Lmod/lmod/lmod/init/bash
 #Run Isoseq3 lima to remove adapters
 #Combine each .ccs.bam into a consensus read set - so that lima runs on the combined .ccs.bams
 
-#EXAMPLE USAGE
-#sbatch Isoseq3_lima_primerRemoval.sh $(ls *.ccs.bam) primers.fasta example_run
+#EXAMPLE USAGE:
+# ccs_bams=$(ls *.ccs.bam)
+# prefix="Test"
+# sbatch Isoseq3_lima_primerRemoval.sh $ccs_bams barcodes.fasta $prefix
+
 
 #set-up enviornment
 module purge
@@ -41,7 +44,7 @@ prefix=$3
 if [ $(echo $name | wc -w) -eq 0 ]
 then
         prefix="ccs_combined"
-				#prefix=$(basename ${ccs_bams%.ccs.bam} )
+        #prefix=$(basename ${ccs_bams%.ccs.bam} )
 fi
 
 echo $ccs_bams
@@ -51,7 +54,7 @@ dataset create --type ConsensusReadSet --name $prefix ${prefix}.consensusreadset
 
 
 #run lima on the combined .ccs bams (as listed in the .xml file). The merging happens 'under the hood'
-#See pacbio bam recipes for more information
+#See pacbio "bam recipes" for more information
 lima --isoseq --dump-clips --no-pbi -j 0 ${prefix}.consensusreadset.xml $barcodes_fasta ${prefix}.bam
 
 
@@ -60,5 +63,5 @@ lima_bams=$(ls *primer_5p*3p.bam)
 dataset create --type ConsensusReadSet --name ${prefix}_FL ${prefix}_FL.consensusreadset.xml $lima_bams
 
 
-#Refine
-isoseq3 refine --require-polya ${prefix}_FL.consensusreadset.xml $barcodes_fasta ${prefix}_unpolished.flnc.bam
+#Refine to remove polyA tails and concatemers
+isoseq3 refine --require-polya ${prefix}_FL.consensusreadset.xml $barcodes_fasta ${prefix}.flnc.bam

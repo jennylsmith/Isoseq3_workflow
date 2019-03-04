@@ -5,14 +5,16 @@
 #purpose: rename the samples to registration number for AML samples.
 
 
-
-#mappingFile="/Users/work/Documents/GitHub/Isoseq3_workflow/samples/ibraries_submitted_to_FHCRC_genomics_core_for_PacBio.csv"
-#rawDir="r54228_20190131_194324"
+#rawDir="/fh/fast/meshinchi_s/pub/r54228_20190131_194324"
 rawDir=$1
 mappingFile=$2
 
+findpath () {
+	find $1 -type f -name "*.subreadset.xml"
+}
+
 #loop through each subdirectory 1_A01, 2_B01, 3_C01, 4_D01 under the raw data directory.
-for file in $(ls -1 $rawDir/{1..4}_*01/*.subreadset.xml)
+for file in $(findpath $rawDir)
 do
  reg=$(cat $file |  head -1 | cut -f  4 -d " " | sed -E 's/Name=.(.+)./\1/' )
 
@@ -24,4 +26,4 @@ do
  #done
 
  printf "$(dirname $file),$(basename $file),$reg\n"
-done >> Sample_ID_Map.csv
+done #>> Sample_ID_Map.csv
