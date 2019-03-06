@@ -36,7 +36,7 @@ prefix=$2
 
 
 #If prefix argument is blank on the command line - pick a default prefix name
-if [ $(echo $prefix | wc -w) -eq 0 ]
+if [[ $(echo $prefix | wc -w) -eq 0 ]]
 then
         prefix="ccs_combined"
         #prefix=$(basename ${ccs_bams%.ccs.bam} )

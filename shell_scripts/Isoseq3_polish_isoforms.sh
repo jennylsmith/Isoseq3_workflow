@@ -40,7 +40,7 @@ unpolished_bam=$1
 prefix=$2
 
 #If prefix argument is blank on the command line - pick a default prefix name
-if [ $(echo $prefix | wc -w) -eq 0 ]
+if [[ $(echo $prefix | wc -w) -eq 0 ]]
 then
         prefix="ccs_combined"
 fi
