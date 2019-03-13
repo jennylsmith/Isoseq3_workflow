@@ -105,6 +105,6 @@ isoseq3 refine Jenny_4cell_FL.consensusreadset.xml barcodes.fasta flnc.bam
 - https://github.com/Magdoll/SQANTI2
 - https://pacbiofileformats.readthedocs.io/en/3.0/BAM.html
 - https://github.com/PacificBiosciences/PacBioFileFormats/wiki/BAM-recipes 
-- http://files.pacb.com/software/smrtanalysis/2.2.0/doc/smrtportal/help/!SSL!/Webhelp/Portal_PacBio_Glossary.htm
+- https://pacbiofileformats.readthedocs.io/en/5.1/
 
 
