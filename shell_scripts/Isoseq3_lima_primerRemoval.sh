@@ -5,7 +5,7 @@
 #SBATCH --mem=62G
 #SBATCH -o lima.%j.out
 #SBATCH -e lima.%j.stderr
-#SBATCH -t 0-1
+#SBATCH -t 0-7
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=jlsmith3@fredhutch.org
 source /app/Lmod/lmod/lmod/init/bash
@@ -19,8 +19,10 @@ source /app/Lmod/lmod/lmod/init/bash
 #EXAMPLE USAGE:
 # ccs_bams=$(ls *.ccs.bam)
 # prefix="Test"
-# sbatch Isoseq3_lima_primerRemoval.sh $ccs_bams barcodes.fasta $prefix
+# sbatch Isoseq3_lima_primerRemoval.sh "$ccs_bams" barcodes.fasta $prefix
 
+
+set -euo pipefail
 
 #set-up enviornment
 module purge
@@ -37,17 +39,10 @@ dir="$SCRATCH/SMRTseq"
 #Define Samples
 ccs_bams=$1 #can use $(ls *.ccs.bam) on command line
 barcodes_fasta=$2
-prefix=$3
-
-
-#If prefix argument is blank on the command line - pick a default prefix name
-if [[ $(echo $prefix | wc -w) -eq 0 ]]
-then
-        prefix="ccs_combined"
-        #prefix=$(basename ${ccs_bams%.ccs.bam} )
-fi
+prefix=${3:-"ccs_combined"} #if not given, use ccs_combined as the default prefix
 
 echo $ccs_bams
+echo $prefix
 
 #Create a combined cluster consensus sequence bams list (as an .xml file)
 dataset create --type ConsensusReadSet --name $prefix ${prefix}.consensusreadset.xml $ccs_bams

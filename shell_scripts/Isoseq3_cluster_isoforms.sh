@@ -45,4 +45,4 @@ fi
 echo $flnc_bam
 
 #run isoseq3 cluster step
-isoseq3 cluster -j 16 --verbose --log-file "${prefix}_cluster.log" $flnc_bam ${prefix}.unpolished.bam
+isoseq3 cluster -j 16 --verbose --log-file "${prefix}_cluster.log" --split-bam 24 $flnc_bam ${prefix}.unpolished.bam
