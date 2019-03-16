@@ -21,7 +21,7 @@ source /app/Lmod/lmod/lmod/init/bash
 # prefix="Test"
 # sbatch Isoseq3_lima_primerRemoval.sh "$ccs_bams" barcodes.fasta $prefix
 
-
+#set script to exit 1 if any of the following are not met.
 set -euo pipefail
 
 #set-up enviornment

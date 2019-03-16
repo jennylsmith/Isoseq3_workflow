@@ -18,6 +18,10 @@ source /app/Lmod/lmod/lmod/init/bash
 #EXAMPLE USAGE:
 
 
+#set script to exit 1 if any of the following are not met.
+set -euo pipefail
+
+
 #set-up enviornment
 module purge
 export PATH=~/anaconda2/bin:$PATH
@@ -32,17 +36,10 @@ dir="$SCRATCH/SMRTseq"
 
 #Define Samples
 flnc_bam=$1
-prefix=$2
-
-
-#If prefix argument is blank on the command line - pick a default prefix name
-if [[ $(echo $prefix | wc -w) -eq 0 ]]
-then
-        prefix="ccs_combined"
-        #prefix=$(basename ${ccs_bams%.ccs.bam} )
-fi
+prefix=${2:-"ccs_combined"}
 
 echo $flnc_bam
+echo $prefix
 
 #run isoseq3 cluster step
 isoseq3 cluster -j 16 --verbose --log-file "${prefix}_cluster.log" --split-bam 24 $flnc_bam ${prefix}.unpolished.bam
