@@ -5,6 +5,9 @@
 #purpose: Create a manifest file of all samples sequenced
 # and (maybe?) rename the samples to registration number for AML samples.
 
+#set script to exit 1 if any of the following are not met.
+set -euo pipefail
+
 
 #Set-up environment
 ml R/3.5.1-foss-2016b-fh1
