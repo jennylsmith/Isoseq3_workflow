@@ -5,7 +5,7 @@
 #SBATCH --mem=62G
 #SBATCH -o polish.%j.out
 #SBATCH -e polish.%j.stderr
-#SBATCH -t 0-1
+#SBATCH -t 0-9
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=jlsmith3@fredhutch.org
 source /app/Lmod/lmod/lmod/init/bash
@@ -22,6 +22,10 @@ source /app/Lmod/lmod/lmod/init/bash
 module purge
 export PATH=~/anaconda2/bin:$PATH
 source activate anaconda2.7
+
+
+#set script to exit 1 if any of the following are not met.
+set -euo pipefail
 
 
 #Define File Locations
@@ -54,4 +58,4 @@ subread_bams=$(find $PWD -type f -name "*.subreads.bam")
 dataset create --type SubreadSet --name $prefix ${prefix}.subreadset.xml $subread_bams
 
 #run the serial polishing algorithm
-isoseq3 polish -j 16 --verbose --log-file "${prefix}_polish.log"  $unpolished_bam ${prefix}.subreadset.xml ${prefix}_polished.bam
+isoseq3 polish -j 16 --verbose --log-file "${prefix}_polish.log"  $unpolished_bam ${prefix}.subreadset.xml ${prefix}.polished.bam

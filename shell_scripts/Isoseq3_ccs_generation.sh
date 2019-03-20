@@ -18,6 +18,9 @@ source /app/Lmod/lmod/lmod/init/bash
 #Each individual movie needs to have ccs.bam created.
 
 
+#set script to exit 1 if any of the following are not met.
+set -euo pipefail
+
 #set-up enviornment
 module purge
 export PATH=~/anaconda2/bin:$PATH
