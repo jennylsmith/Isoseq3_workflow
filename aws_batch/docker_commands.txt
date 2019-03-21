@@ -1,0 +1,23 @@
+#Jenny Smith
+#3/20/19
+
+
+#Steps to Create The Isoseq3 Image
+1. create the Dockerfile for Anaconda installation of Isoseq3.
+2. run docker info to check everything looks good.
+3. create a clean empty directory and move the dockerfile into it (I always get errors when building the image any other context due to extraneaous files.)
+4. mv the Dockerfile into the empty directory
+5. cd into the new directory.
+6. run ` docker build .` . Better to use `docker build -t username/repo:tag` so you will have an informative name associated with the image, not just a hash.
+7. run `docker images ls -a` to find your image hash
+8. run `docker tag $IMAGEID jennylsmith/Isoseq3` .
+  - NOTE: IMAGEID is from the output of docker build, where stdout prints "Successfully built f52f38b7823e".
+  - Or the $IMAGEID is from the docker images ls "Image ID" column. The Hash is the $IMAGEID
+9. run `docker tag $IMAGEID username/repo`. default tag is "latest"
+10. run `docker push username/repo`
+
+
+#References
+https://docs.docker.com/v17.09/engine/reference/commandline/build/#build-with-path
+https://github.com/jennylsmith/batch_pipeline/
+http://www.science.smith.edu/dftwiki/index.php/Tutorial:_Docker_Anaconda_Python_--_4
