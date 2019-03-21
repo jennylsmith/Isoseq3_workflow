@@ -16,7 +16,7 @@
             {
               "name": "BATCH_FILE_S3_URL",
               "value": "s3://fh-pi-meshinchi-s/SR/jlsmith3-scripts/Isoseq3_polish_isoforms_batch.sh"
-            },
+            }
         ]
     }
 }
