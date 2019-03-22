@@ -30,8 +30,8 @@ echo $AWS_BATCH_JOB_ID
 #The copying of the results of `isoseq3 cluster` to the container  should have no more than 3 files so those are specified.
 echo "Copying the subreads.bam and unpolished.bam"
 mkdir -p $SCRATCH
-aws s3 cp --quiet --recursive --exclude "*" --include "*.subreads.bam"  $BUCKET/SR/SMRTSeq/ $SCRATCH
-aws s3 cp --quiet --recursive --exclude "*" --include "${UNPOLISHED_BAM_PREFIX}.bam" --include "${UNPOLISHED_BAM_PREFIX}.bam.pbi" $BUCKET/SR/SMRTSeq/Isoseq3/ $SCRATCH
+aws s3 cp --only-show-errors --recursive --exclude "*" --include "*.subreads.bam"  $BUCKET/SR/SMRTSeq/ $SCRATCH
+aws s3 cp --only-show-errors --recursive --exclude "*" --include "${UNPOLISHED_BAM_PREFIX}.bam" --include "${UNPOLISHED_BAM_PREFIX}.bam.pbi" $BUCKET/SR/SMRTSeq/Isoseq3/ $SCRATCH
 
 #Create a subread set for the original samples' "movie.subreads.bam" files.
 #Use find command to create a list of the input subreads.bam files with full file paths.
@@ -45,8 +45,9 @@ echo "Running polish"
 isoseq3 polish -j 32 --verbose --log-file "${PREFIX}_polish.log"  $SCRATCH/${UNPOLISHED_BAM_PREFIX}.bam ${PREFIX}.subreadset.xml ${PREFIX}.polished.bam
 
 #Upload the results to the S3 bucket
-aws s3 cp --quiet --recursive --exclude "*" --include "${PREFIX}*"  $PWD $BUCKET/SR/SMRTSeq/Isoseq3/
+echo "Copying polish results to bucket"
+aws s3 cp --only-show-errors --recursive --exclude "*" --include "${PREFIX}*"  $PWD $BUCKET/SR/SMRTSeq/Isoseq3/
 
 #remove the scratch directory
-echo "Removing scratch directory."
+echo "Removing scratch directory"
 rm -rf $SCRATCH
