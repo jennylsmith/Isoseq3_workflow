@@ -10,6 +10,7 @@
 
 #set script to exit 1 if any of the following are not met.
 set -euo pipefail
+export PATH=/home/ubuntu/anaconda2/bin:$PATH #re-declare path b/c fetch_and_run.sh overwrites PATH as the entry point.
 
 
 #Define File Locations
@@ -23,7 +24,6 @@ PREFIX=${1:-"ccs_combined"} #if not given, use ccs_combined as the default PREFI
 echo $UNPOLISHED_BAM_PREFIX
 echo $PREFIX
 echo $AWS_BATCH_JOB_ID
-
 
 #Copy the datasets into the container.
 #This assumes all subreads.bam files in the specified BUCKET are included and were used to create the UNPOLISHED_BAM.

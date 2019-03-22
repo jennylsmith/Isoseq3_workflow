@@ -41,21 +41,17 @@ cd $dir
 
 #Define Samples
 unpolished_bam=$1
-prefix=$2
-
-#If prefix argument is blank on the command line - pick a default prefix name
-if [[ $(echo $prefix | wc -w) -eq 0 ]]
-then
-        prefix="ccs_combined"
-fi
+prefix=${2:-"ccs_combined"} #If prefix argument is blank on the command line - pick a default prefix name
 
 echo $unpolished_bam
 
+#BAMS are 1.3 Tb of data!
 #Create a subread set for the original samples' "movie.subreads.bam" files.
 #Use find command to create a list of the input subreads.bam files with full file paths.
 #this assumes all subreads.bam files in the current working directory are included.
-subread_bams=$(find $PWD -type f -name "*.subreads.bam")
+subread_bams=$(find $PWD -type f -name "*.subreads.bam"); echo "$subread_bams"
 dataset create --type SubreadSet --name $prefix ${prefix}.subreadset.xml $subread_bams
 
-#run the serial polishing algorithm
-isoseq3 polish -j 16 --verbose --log-file "${prefix}_polish.log"  $unpolished_bam ${prefix}.subreadset.xml ${prefix}.polished.bam
+
+# #run the serial polishing algorithm
+# isoseq3 polish -j 16 --verbose --log-file "${prefix}_polish.log"  $unpolished_bam ${prefix}.subreadset.xml ${prefix}.polished.bam
