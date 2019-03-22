@@ -1,24 +1,16 @@
 #!/bin/bash
 
-# A test harness to run run_kallisto.py in Docker
+# A test harness to run jennylsmith/isoseq3 in Docker
 # run something like this:
 
-# docker run  --rm --name kallisto -v ~/.aws:/root/.aws \
-#   -v $(pwd):/work -w /work --entrypoint /work/harness \
-#   fredhutch/pipeline_kallisto
-
-#for interactive mode use:
-#docker run -ti --rm --name kallisto -v ~/.aws:/root/.aws -v $(pwd):/work -w /work \
-#  --entrypoint /bin/bash  jennylsmith/kallistov45.0
-
-
-export AWS_BATCH_JOB_ID='some-job-id-with-a:colon'
-export AWS_BATCH_JOB_ATTEMPT=1
+#for interactive mode use below in the terminal:
+docker run -ti --rm --name isoseq3 -v ~/.aws:/root/.aws  --entrypoint /bin/bash  jennylsmith/isoseq3
 
 export BUCKET_NAME=fh-pi-meshinchi-s
-export LIST_OF_SAMPLES=s3://fh-pi-meshinchi-s/SR/Batch_Pipeline_Submission/fq.test1.txt
-export AWS_BATCH_JOB_ARRAY_INDEX=1
 export AWS_PROFILE=default
-export REFERENCE=GRCh38.v29
+export BATCH_FILE_S3_URL=$BUCKET_NAME/path/to/Isoseq3_polish_isoforms_batch.sh
+export BATCH_FILE_TYPE=script
+bash fetch_and_run.sh
 
-python3 run_kallisto.py
+##NOT RUN
+#bash Isoseq3_polish_isoforms_batch.sh #DONT Do this. The script downloads 1.3Tb of  data to working directory.
