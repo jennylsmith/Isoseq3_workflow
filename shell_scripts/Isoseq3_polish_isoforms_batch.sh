@@ -19,11 +19,9 @@ SCRATCH="/scratch/${AWS_BATCH_JOB_ID}_${AWS_BATCH_CE_NAME}" #create unique direc
 #Define Samples
 PREFIX=${1:-"ccs_combined"} #if not given, use ccs_combined as the default PREFIX
 
-
 echo $UNPOLISHED_BAM_PREFIX
 echo $PREFIX
 echo $AWS_BATCH_JOB_ID
-
 
 #Copy the datasets into the container.
 #This assumes all subreads.bam files in the specified BUCKET are included and were used to create the UNPOLISHED_BAM.
