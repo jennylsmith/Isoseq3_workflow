@@ -28,7 +28,7 @@ DELETE90="/fh/scratch/delete90/meshinchi_s/jlsmith3"
 
 # conda create -n anaconda2.7 python=2.7 anaconda
 # source activate anaconda2.7
-# conda install -n  biopython
+# conda install -n anaconda2.7 biopython
 # conda install -n anaconda2.7 -c http://conda.anaconda.org/cgat bx-python
 # conda install -n anaconda2.7 -c bioconda isoseq3
 # conda install -n anaconda2.7 -c bioconda pbcoretools # for manipulating PacBio datasets

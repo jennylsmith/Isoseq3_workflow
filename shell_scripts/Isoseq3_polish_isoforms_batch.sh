@@ -10,6 +10,7 @@
 
 #set script to exit 1 if any of the following are not met.
 set -euo pipefail
+export PATH=/home/ubuntu/anaconda2/bin:$PATH #re-declare path b/c fetch_and_run.sh overwrites PATH as the entry point.
 
 
 #Define File Locations
