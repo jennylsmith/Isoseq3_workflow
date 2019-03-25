@@ -28,8 +28,8 @@
             "value": "fh-pi-meshinchi-s"
           }
         ],
-        "image": "jennylsmith/isoseq3", 
-        "vcpus": 32,
-        "memory": 56000
+        "image": "jennylsmith/isoseq3",
+        "vcpus": 36,
+        "memory": 59000
     }
 }
