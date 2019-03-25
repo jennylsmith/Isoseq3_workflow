@@ -64,6 +64,8 @@ sbatch Isoseq3_lima_primerRemoval.sh $ccs_bams barcodes.fasta $prefix
 
 ### Example Workflow (Liz)
 
+Last Updated: 03/25/2019
+
 Liz uses 4 cells to demonstrate how to first run LIMA and IsoSeq3 on combined cells (for higher throughput) and later demultiplex into per-sample isoform counts.
 
 1. Combine the CCS into a `consensusreadset` and run LIMA
@@ -91,10 +93,60 @@ bash cmd
 3. Run IsoSeq3
 
 ```
-isoseq3 refine Jenny_4cell_FL.consensusreadset.xml barcodes.fasta flnc.bam
-```
-(to be continued)
+isoseq3 refine Jenny_4cell_FL.consensusreadset.xml barcodes.fasta flnc.bam --require-polya
+isoseq3 cluster -j 16 --verbose --log-file "test_cluster.log"  test.flnc.bam test.unpolished.bam --split-bam 24
 
+# can run below commands in parallel
+isoseq3 polish unpolished.0.bam Jenny_4cell.subreadset.xml polished.0.bam -j 12
+isoseq3 polish unpolished.1.bam Jenny_4cell.subreadset.xml polished.1.bam -j 12
+...
+isoseq3 polish unpolished.23.bam Jenny_4cell.subreadset.xml polished.23.bam -j 12
+
+# then combine the HQ FASTQ
+gunzip polished.*.hq.fastq.gz
+cat polished.18.hq.fastq > test_polished.hq.fastq
+```
+
+4. Map to Genome and Collapse
+
+See [Cupcake tutorial here](https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/What-to-do-after-Iso-Seq-Cluster%3F)
+
+```
+minimap2 -ax splice -t 30 -uf --secondary=no hg38_noalt.fa test_polished.hq.fasta > test_polished.hq.fasta.sam
+sort -k 3,3 -k 4,4n test_polished.hq.fasta.sam > test_polished.hq.fasta.sorted.sam
+collapse_isoforms_by_sam.py --input test_polished.hq.fastq --fq -s test_polished.hq.fasta.sorted.sam -c 0.99 -i 0.95 --dun-merge-5-shorter -o test_polished.hq.no5merge
+
+get_abundance_post_collapse.py test_polished.hq.no5merge.collapsed test_polished.cluster_report.csv
+filter_away_subset.py test_polished.hq.no5merge.collapsed
+```
+
+5. Hack classify report and demux into two conditions
+
+Run the following Python script to hack by movie to change the `primer` field to reflect the two conditions.
+
+
+```
+from csv import DictReader, DictWriter
+
+d = {'m54228_181211_220100': 'NBM', 'm54228_181214_110428': 'NBM', \
+     'm54228_190201_161538': 'AML', 'm54247_190125_201139': 'AML'}
+     
+f = open('flnc.report.hacked.csv', 'w')
+reader = DictReader(open('flnc.report.csv'),delimiter=',')
+writer = DictWriter(f, reader.fieldnames, delimiter=',')
+writer.writeheader()
+for r in reader:
+    r['primer'] = d[r['id'].split('/')[0]]
+    writer.writerow(r)
+
+f.close()
+```
+
+Next run the demux script. See [tutorial here](https://github.com/Magdoll/cDNA_Cupcake/wiki/Tutorial:-Demultiplexing-SMRT-Link-Iso-Seq-Jobs#mapped)
+
+```
+python <path_to_cupcake>/post_isoseq_cluster/demux_isoseq_with_genome.py --mapped_fastq test_polished.hq.no5merge.collapsed.filtered.rep.fq --read_stat test_polished.hq.no5merge.collapsed.read_stat.txt --classify_csv ../flnc.report.hacked.csv -o test_polished.hq.no5merge.collapsed.filtered.mapped_fl_count.txt
+```
 
 ## Resources and References
 
