@@ -1,0 +1,34 @@
+############ STEP 1 #################
+# Setup Ananconda
+# https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/Tutorial:-Installing-and-Running-Iso-Seq-3-using-Conda
+
+# module purge
+# ./Anaconda2-2018.12-Linux-x86_64.sh
+# conda -V
+# conda update conda
+
+# conda create -n anaconda2.7 python=2.7 anaconda
+# source activate anaconda2.7
+# conda install -n anaconda2.7 biopython
+# conda install -n anaconda2.7 -c http://conda.anaconda.org/cgat bx-python
+# conda install -n anaconda2.7 -c bioconda isoseq3
+# conda install -n anaconda2.7 -c bioconda pbcoretools # for manipulating PacBio datasets
+# conda install -n anaconda2.7 -c bioconda bamtools    # for converting BAM to fasta
+# conda install -n anaconda2.7 -c bioconda pysam       # for making CSV
+
+
+############## STEP 2 ################
+#download precompiled binaries for minimap2
+# curl -L https://github.com/lh3/minimap2/releases/download/v2.15/minimap2-2.15_x64-linux.tar.bz2 | tar -jxvf -
+
+
+
+######## STEP 3 ###############
+#for cDNA_cupcake with python2.7.6:
+#https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU:-supporting-scripts-for-Iso-Seq-after-clustering-step#collapse
+# git clone https://github.com/Magdoll/cDNA_Cupcake.git
+# source activate anaconda2.7
+# cd cDNA_Cupcake
+# python setup.py build
+# python setup.py install
+# Installed /home/jlsmith3/anaconda2/envs/anaconda2.7/lib/python2.7/site-packages/bx_python-0.7.3-py2.7-linux-x86_64.egg
