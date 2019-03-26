@@ -43,7 +43,7 @@ SUBREAD_BAMS=$(find $SCRATCH -type f -name "*.subreads.bam")
 echo "Creating subreadset.xml"
 dataset create --type SubreadSet --name $PREFIX ${PREFIX}.subreadset.xml $SUBREAD_BAMS
 
-echo "$(cat ${PREFIX}.subreadset.xml)"
+aws s3 cp ${PREFIX}.test.subreadset.xml $BUCKET/SR/SMRTSeq/Isoseq3/
 
 #run the serial polishing algorithm
 echo "Running polish" #--log-file "${PREFIX}_polish.log"
