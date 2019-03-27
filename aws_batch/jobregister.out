@@ -1,5 +1,5 @@
 {
-    "jobDefinitionArn": "arn:aws:batch:us-west-2:064561331775:job-definition/isoseq3-polish:2", 
+    "jobDefinitionArn": "arn:aws:batch:us-west-2:064561331775:job-definition/isoseq3-polish:3", 
     "jobDefinitionName": "isoseq3-polish", 
-    "revision": 2
+    "revision": 3
 }

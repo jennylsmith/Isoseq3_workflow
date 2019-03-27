@@ -1,7 +1,7 @@
 {
     "jobName": "All_Combined_0",
     "jobQueue": "mixed",
-    "jobDefinition": "isoseq3-polish:2",
+    "jobDefinition": "isoseq3-polish:3",
     "containerOverrides": {
         "command": ["isoseq3_polish_isoforms_batch.sh", "all_movies.0"],
         "environment": [

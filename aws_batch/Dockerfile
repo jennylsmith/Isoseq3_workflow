@@ -35,7 +35,7 @@ RUN conda install -p /home/ubuntu/anaconda2 -c bioconda pysam       # for making
 RUN conda update -p /home/ubuntu/anaconda2 -c bioconda isoseq3
 
 #Install Fetch and Run
-RUN curl -LO https://github.com/awslabs/aws-batch-helpers/archive/master.zip
+RUN curl -LO https://github.com/jennylsmith/aws-batch-helpers/archive/master.zip
 RUN unzip master.zip
 RUN cp aws-batch-helpers-master/fetch-and-run/fetch_and_run.sh /usr/local/bin/
 RUN rm -rf master.zip aws-batch-helpers-master
