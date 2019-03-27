@@ -22,18 +22,15 @@ source /app/Lmod/lmod/lmod/init/bash
 #set script to exit 1 if any of the following are not met.
 set -euo pipefail
 
-
 #set-up enviornment
 module purge
 export PATH=~/anaconda2/bin:$PATH
 source activate anaconda2.7
 
-
 #Define File Locations
 TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
 SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3"
 dir="$SCRATCH/SMRTseq"
-
 
 #Define Samples
 flnc_bam=$1

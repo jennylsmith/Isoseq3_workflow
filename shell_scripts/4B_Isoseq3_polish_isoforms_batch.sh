@@ -27,32 +27,37 @@ echo $UNPOLISHED_BAM_PREFIX
 echo $PREFIX
 echo $AWS_BATCH_JOB_ID
 
-#Copy the datasets into the container.
-#This assumes all subreads.bam files in the specified BUCKET are included and were used to create the UNPOLISHED_BAM.
-#The copying of the results of `isoseq3 cluster` to the container  should have no more than 3 files so those are specified.
-echo "Copying the subreads.bam and unpolished.bam"
-aws s3 cp --only-show-errors --recursive --exclude "*" --include "*.subreads.bam" --include "*.subreads.bam.pbi"  $BUCKET/SR/SMRTSeq/ .
-aws s3 cp --only-show-errors --recursive --exclude "*" --include "${UNPOLISHED_BAM_PREFIX}.bam" --include "${UNPOLISHED_BAM_PREFIX}.bam.pbi" $BUCKET/SR/SMRTSeq/Isoseq3/ .
+echo $PWD
+echo $(isoseq3)
+echo $(which dataset)
+echo $(which aws)
 
-echo "$(ls -1 $PWD)"
-
-#Create a subread set for the original samples' "movie.subreads.bam" files.
-#Use find command to create a list of the input subreads.bam files with full file paths.
-#this assumes all subreads.bam files in the current working directory are included.
-SUBREAD_BAMS=$(find $SCRATCH -type f -name "*.subreads.bam")
-echo "Creating subreadset.xml"
-dataset create --type SubreadSet --name $PREFIX ${PREFIX}.subreadset.xml $SUBREAD_BAMS
-
-aws s3 cp ${PREFIX}.test.subreadset.xml $BUCKET/SR/SMRTSeq/Isoseq3/
-
-#run the serial polishing algorithm
-echo "Running polish" #--log-file "${PREFIX}_polish.log"
-isoseq3 polish -j 36 --verbose   ${UNPOLISHED_BAM_PREFIX}.bam ${PREFIX}.subreadset.xml ${PREFIX}.polished.bam
-
-#Upload the results to the S3 bucket
-echo "Copying polish results to bucket"
-aws s3 cp --only-show-errors --recursive --exclude "*" --include "${PREFIX}*" $PWD $BUCKET/SR/SMRTSeq/Isoseq3/
-
-#remove the scratch directory
-echo "Removing scratch directory"
-rm -rf $SCRATCH
+# #Copy the datasets into the container.
+# #This assumes all subreads.bam files in the specified BUCKET are included and were used to create the UNPOLISHED_BAM.
+# #The copying of the results of `isoseq3 cluster` to the container  should have no more than 3 files so those are specified.
+# echo "Copying the subreads.bam and unpolished.bam"
+# aws s3 cp --only-show-errors --recursive --exclude "*" --include "*.subreads.bam" --include "*.subreads.bam.pbi"  $BUCKET/SR/SMRTSeq/ .
+# aws s3 cp --only-show-errors --recursive --exclude "*" --include "${UNPOLISHED_BAM_PREFIX}.bam" --include "${UNPOLISHED_BAM_PREFIX}.bam.pbi" $BUCKET/SR/SMRTSeq/Isoseq3/ .
+#
+# echo "$(ls -1R $PWD)" #why is this nested???
+#
+# #Create a subread set for the original samples' "movie.subreads.bam" files.
+# #Use find command to create a list of the input subreads.bam files with full file paths.
+# #this assumes all subreads.bam files in the current working directory are included.
+# SUBREAD_BAMS=$(find $SCRATCH -type f -name "*.subreads.bam")
+# echo "Creating subreadset.xml"
+# echo "$SUBREAD_BAMS"
+# dataset create --force --type SubreadSet --name $PREFIX ${PREFIX}.subreadset.xml $SUBREAD_BAMS
+# aws s3 cp ${PREFIX}.subreadset.xml $BUCKET/SR/SMRTSeq/Isoseq3/${PREFIX}.test.subreadset.xml
+#
+# #run the serial polishing algorithm
+# echo "Running polish" #--log-file "${PREFIX}_polish.log"
+# isoseq3 polish -j 36 --verbose   ${UNPOLISHED_BAM_PREFIX}.bam ${PREFIX}.subreadset.xml ${PREFIX}.polished.bam
+#
+# #Upload the results to the S3 bucket
+# echo "Copying polish results to bucket"
+# aws s3 cp --only-show-errors --recursive --exclude "*" --include "${PREFIX}*" $PWD $BUCKET/SR/SMRTSeq/Isoseq3/
+#
+# #remove the scratch directory
+# echo "Removing scratch directory"
+# rm -rf $SCRATCH

@@ -15,47 +15,49 @@ source /app/Lmod/lmod/lmod/init/bash
 #Minimap2 Alignment of Iso-seq3 Results for use with Cupcake Collapse Isoforms and count isoforms
 
 
+#set script to exit 1 if any of the following are not met.
+set -euo pipefail
+
 #Load Modules/define paths. Using python2.7 in virtual enviornment "anaconda2.7"
 module purge
-source activate anaconda2.7
-export PATH=~/scripts/opt/bin:$PATH #for minimap2 & cDNA_cupcake
+export PATH=~/scripts/opt/bin:$PATH #for minimap2
 ml SAMtools/1.8-foss-2016b
-
 
 #define file locations
 DELETE90="/fh/scratch/delete90/meshinchi_s/jlsmith3"
 TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
-SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq"
-cd $scratch
+SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq/testing_set"
+cd $SCRATCH
 
 #define samples and genomes
-genome="$TARGET/Reference_Data/GRCh38/fasta/genome/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"
-prefix=${1:- "minimap2"}
+genome="$TARGET/Reference_Data/GRCh38/minimap2_idx/Homo_sapiens.GRCh38.dna.primary_assembly.mmi"
+prefix=${1:- "ccs_combined"}
 
-
-#Combine the HQ FASTQ from the polish step
+#Combine the HQ FASTQs from the polish step
 #this assumes you will be using all the hq.fasta/q files in the current working directory
-# and requires a prefix that was used in 4_isoseq3_polish_isoforms.sh step.
-echo ${prefix}*polished.hq.fastq.gz
-files=$(echo ${prefix}*polished.hq.fastq.gz)
+# and requires a prefix that was used in 4A_isoseq3_polish_isoforms.sh step
+#fastqs can be either gzipped or not.
+files=$(echo ${prefix}*polished.hq.fastq*)
+echo "$files"
 
-# if [[ ! -e "$files" ]]
-# then
-# 	echo "No high quality fastqs in working directory."
-# 	exit 1
-# else if [[ $(echo $files | wc -l) -gt 1 ]]
-	gunzip ${prefix}*polished.hq.fastq.gz)
-	cat ${prefix}*.hq.fastq > ${prefix}.polished.hq.fastq
-# else
-# 	gunzip ${prefix}.polished.hq.fastq.gz
-# fi
+#https://stackoverflow.com/questions/14765569/test-if-multiple-files-exist
+if [[ !  $(ls -1 $files  2>/dev/null) ]]
+then
+	echo "No high quality fastqs in working directory."
+	exit 1
+elif [[ $(echo $files | wc -w) -gt 1 ]]
+then
+	# gunzip ${prefix}*polished.hq.fastq.gz
+	zcat ${prefix}*.hq.fastq > ${prefix}.polished.hq.fastq #needs testing
+fi
 
-
-#Run alignment
-minimap2 -ax splice -t 16 -uf --secondary=no $genome ${prefix}_polished.hq.fastq > ${prefix}_polished.hq.fastq.sam
-
-#sort and index Bam/Sam files
-sort -k 3,3 -k 4,4n  ${prefix}_polished.hq.fastq.sam > ${prefix}_polished.hq.fastq.srt.sam
-# samtools view -bS ${hq_fq}.sam > ${hq_fq}.bam
-# samtools sort ${hq_fq}.bam > ${hq_fq}.srt.bam
-# samtools index ${hq_fq}.srt.bam
+# #Run alignment
+# sam=${prefix}.polished.hq.fastq.sam
+# bam=${sam/.sam/.bam}
+# minimap2 -ax splice -t 16 -uf --secondary=no $genome ${prefix}.polished.hq.fastq* > $sam
+#
+# #sort and index Bam/Sam files
+# sort -k 3,3 -k 4,4n  ${prefix}.polished.hq.fastq.sam > ${sam/.sam/.srt.sam}
+# samtools view -bS $sam > $bam
+# samtools sort $bam > ${bam/.bam/.srt.bam}
+# samtools index  ${bam/.bam/.srt.bam}
