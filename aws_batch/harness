@@ -4,11 +4,11 @@
 # run something like this:
 
 #for interactive mode use below in the terminal:
-docker run -ti --rm --name isoseq3 -v ~/.aws:/root/.aws  --entrypoint /bin/bash  jennylsmith/isoseq3
+docker run -ti --rm --name isoseq3 -v ~/.aws:/root/.aws  --entrypoint /bin/bash  jennylsmith/isoseq3:latest
 
 export BUCKET_NAME=fh-pi-meshinchi-s
 export AWS_PROFILE=default
-export BATCH_FILE_S3_URL=$BUCKET_NAME/path/to/Isoseq3_polish_isoforms_batch.sh
+export BATCH_FILE_S3_URL=s3://$BUCKET_NAME/SR/jlsmith3-scripts/Isoseq3_polish_isoforms_batch_test.sh
 export BATCH_FILE_TYPE=script
 bash fetch_and_run.sh
 
