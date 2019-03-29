@@ -19,8 +19,7 @@ source /app/Lmod/lmod/lmod/init/bash
 
 
 #EXAMPLE USAGE:
-# sbatch 1_Isoseq3_ccs_generation.sh ""
-
+# sbatch 1_Isoseq3_ccs_generation.sh m5447_XXXXX.subreads.bam
 
 
 #set script to exit 1 if any of the following are not met.

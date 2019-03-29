@@ -51,13 +51,13 @@ then
 	zcat ${prefix}*.hq.fastq > ${prefix}.polished.hq.fastq #needs testing
 fi
 
-# #Run alignment
-# sam=${prefix}.polished.hq.fastq.sam
-# bam=${sam/.sam/.bam}
-# minimap2 -ax splice -t 16 -uf --secondary=no $genome ${prefix}.polished.hq.fastq* > $sam
-#
-# #sort and index Bam/Sam files
-# sort -k 3,3 -k 4,4n  ${prefix}.polished.hq.fastq.sam > ${sam/.sam/.srt.sam}
-# samtools view -bS $sam > $bam
-# samtools sort $bam > ${bam/.bam/.srt.bam}
-# samtools index  ${bam/.bam/.srt.bam}
+#Run alignment
+sam=${prefix}.polished.hq.fastq.sam
+bam=${sam/.sam/.bam}
+minimap2 -ax splice -t 16 -uf --secondary=no $genome ${prefix}.polished.hq.fastq* > $sam
+
+#sort and index Bam/Sam files
+sort -k 3,3 -k 4,4n  ${prefix}.polished.hq.fastq.sam > ${sam/.sam/.srt.sam}
+samtools view -bS $sam > $bam
+samtools sort $bam > ${bam/.bam/.srt.bam}
+samtools index  ${bam/.bam/.srt.bam}

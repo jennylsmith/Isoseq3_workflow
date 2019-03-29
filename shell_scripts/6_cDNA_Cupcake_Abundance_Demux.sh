@@ -21,19 +21,20 @@ source activate anaconda2.7
 export PATH=~/.local/bin:$PATH #for cDNA_cupcake
 ml SAMtools/1.8-foss-2016b
 
-
 #define file locations
 DELETE90="/fh/scratch/delete90/meshinchi_s/jlsmith3"
 TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
 SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq"
-manifest=
-cd $scratch
+
+cd $SCRATCH
+
+#define reference files
+manifest="~/scripts/Isoseq3_workflow/samples/Sample_ID_Map.csv" #location from manifest.sh
+classify_csv="../flnc.report.hacked.csv"
 
 #define samples
-sample_idmap="~/scripts/Isoseq3_workflow/samples/Sample_ID_Map.csv" #location from manifest.sh
-hq_fq=$1
-prefix=${2:-"ccs_combined"} #prefix must be the same as used in 44A_isoseq3_polish_isoforms.sh
-
+hq_fq=$1 #eg hq_fq=test.polished.hq.fastq
+prefix=${2:-"ccs_combined"} #prefix must be the same as used in 4A_isoseq3_polish_isoforms.sh and 3_Isoseq3_cluster_isoforms.sh
 
 #Collapse Reads
 collapse_isoforms_by_sam.py --input ${hq_fq} --fq \
@@ -48,7 +49,5 @@ filter_away_subset.py ${prefix}.polished.hq.no5merge.collapsed
 
 
 
-
-
 #Run demultiplexing scripts
-python <path_to_cupcake>/post_isoseq_cluster/demux_isoseq_with_genome.py --mapped_fastq test_polished.hq.no5merge.collapsed.filtered.rep.fq --read_stat test_polished.hq.no5merge.collapsed.read_stat.txt --classify_csv ../flnc.report.hacked.csv -o test_polished.hq.no5merge.collapsed.filtered.mapped_fl_count.txt
+python <path_to_cupcake>/post_isoseq_cluster/demux_isoseq_with_genome.py --mapped_fastq test_polished.hq.no5merge.collapsed.filtered.rep.fq --read_stat test_polished.hq.no5merge.collapsed.read_stat.txt --classify_csv $classify_csv -o test_polished.hq.no5merge.collapsed.filtered.mapped_fl_count.txt
