@@ -1,18 +1,18 @@
 {
     "jobName": "All_Combined_0",
-    "jobQueue": "mixed",
+    "jobQueue": "highmem",
     "jobDefinition": "isoseq3-polish:3",
+    "arrayProperties":{
+      "size": 23
+    },
     "containerOverrides": {
-        "command": ["isoseq3_polish_isoforms_batch.sh", "all_movies.0"],
-        "memory": 71000,
+        "command": ["4B_Isoseq3_polish_isoforms_batch.sh"],
+        "memory": 243000,
+        "vcpus": 32,
         "environment": [
             {
               "name": "BATCH_FILE_TYPE",
               "value": "script"
-            },
-            {
-              "name": "UNPOLISHED_BAM_PREFIX",
-              "value": "all_movies.unpolished.0"
             },
             {
               "name": "BATCH_FILE_S3_URL",

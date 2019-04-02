@@ -25,8 +25,10 @@
 
 ######## STEP 3 ###############
 #for cDNA_cupcake with python2.7.6:
+##You will need to periodically update cDNA_cupcake repo.
 #https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU:-supporting-scripts-for-Iso-Seq-after-clustering-step#collapse
 # git clone https://github.com/Magdoll/cDNA_Cupcake.git
+# export PATH=~/anaconda2/bin:$PATH
 # source activate anaconda2.7
 # cd cDNA_Cupcake
 # python setup.py build
