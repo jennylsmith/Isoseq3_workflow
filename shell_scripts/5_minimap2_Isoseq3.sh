@@ -26,17 +26,15 @@ ml SAMtools/1.8-foss-2016b
 #define file locations
 DELETE90="/fh/scratch/delete90/meshinchi_s/jlsmith3"
 TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
-SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq/testing_set"
+SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq"
 cd $SCRATCH
 
 #define samples and genomes
 genome="$TARGET/Reference_Data/GRCh38/minimap2_idx/Homo_sapiens.GRCh38.dna.primary_assembly.mmi"
-prefix=${1:- "ccs_combined"}
+prefix=${1:- "ccs_combined"} #requires same prefix that was used in 4A/B_isoseq3_polish_isoforms.sh step
 
 #Combine the HQ FASTQs from the polish step
 #this assumes you will be using all the hq.fasta/q files in the current working directory
-# and requires a prefix that was used in 4A_isoseq3_polish_isoforms.sh step
-#fastqs can be either gzipped or not.
 files=$(echo ${prefix}*polished.hq.fastq*)
 echo "$files"
 
@@ -47,17 +45,21 @@ then
 	exit 1
 elif [[ $(echo $files | wc -w) -gt 1 ]]
 then
+	echo "Many file"
 	# gunzip ${prefix}*polished.hq.fastq.gz
-	zcat ${prefix}*.hq.fastq > ${prefix}.polished.hq.fastq #needs testing
+	# zcat ${prefix}*.hq.fastq.gz > ${prefix}.polished.hq.fastq #needs testing
+	# zcat ${prefix}*.lq.fastq.gz > ${prefix}.polished.lq.fastq #needs testing
+	# ls -1d polished.*.bam > list
+	# bamtools merge -list list -out ${prefix}.polished.bam
 fi
 
-#Run alignment
+#Run alignment. Fastqs can be either gzipped or not in minimap2
 sam=${prefix}.polished.hq.fastq.sam
-bam=${sam/.sam/.bam}
+bam=${sam%.sam}.bam
 minimap2 -ax splice -t 16 -uf --secondary=no $genome ${prefix}.polished.hq.fastq* > $sam
 
 #sort and index Bam/Sam files
-sort -k 3,3 -k 4,4n  ${prefix}.polished.hq.fastq.sam > ${sam/.sam/.srt.sam}
+sort -k 3,3 -k 4,4n  ${prefix}.polished.hq.fastq.sam > ${sam%.sam}.srt.sam
 samtools view -bS $sam > $bam
-samtools sort $bam > ${bam/.bam/.srt.bam}
-samtools index  ${bam/.bam/.srt.bam}
+samtools sort $bam > ${bam%.bam}.srt.bam
+samtools index ${bam%.bam}.srt.bam
