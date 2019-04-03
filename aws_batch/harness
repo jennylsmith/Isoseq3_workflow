@@ -4,13 +4,15 @@
 # run something like this:
 
 #for interactive mode use below in the terminal:
-docker run -ti --rm --name isoseq3 -v ~/.aws:/root/.aws  --entrypoint /bin/bash  jennylsmith/isoseq3:latest
+docker run -ti --rm --name isoseq3 -v $HOME/.aws:/root/.aws  --entrypoint /bin/bash  jennylsmith/isoseq3:latest
 
-export BUCKET_NAME=fh-pi-meshinchi-s
 export AWS_PROFILE=default
-export BATCH_FILE_S3_URL=s3://$BUCKET_NAME/SR/jlsmith3-scripts/Isoseq3_polish_isoforms_batch_test.sh
+export BATCH_FILE_S3_URL=s3://fh-pi-meshinchi-s/SR/jlsmith3-scripts/4B_Isoseq3_polish_isoforms_batch.sh
 export BATCH_FILE_TYPE=script
-bash fetch_and_run.sh
+export LIST_OF_SAMPLES=s3://fh-pi-meshinchi-s/SR/Batch_Pipeline_Submission/submit_polish.4.2.19.txt
+export AWS_BATCH_JOB_ID=XXXXXXXX
+export AWS_BATCH_JOB_ARRAY_INDEX=0
 
 ##NOT RUN
-#bash Isoseq3_polish_isoforms_batch.sh #DONT Do this. The script downloads 1.3Tb of  data to working directory.
+#bash fetch_and_run.sh
+#bash 4B_Isoseq3_polish_isoforms_batch.sh #DONT Do this. The script downloads 1.3Tb of  data to working directory.

@@ -43,7 +43,7 @@ polish (){
 	prefix=$(echo $unpolished_bam | sed -E "s/\.bam|\.unpolished//gm" ) #Uses same prefix as in 3_Isoseq3_cluster_isoforms.py
 	echo $unpolished_bam $prefix
 
-	#Create a subread set for the original samples' "movie.subreads.bam" files. Usea `find` command to create a list of the input subreads.bam files with full file paths.
+	#Create a subread set for the original samples' "movie.subreads.bam" files. Uses `find` command to create a list of the input subreads.bam files with full file paths.
 	#this assumes all subreads.bam files in the current working directory are included.
 	subread_bams=$(find $PWD -type f -name "*.subreads.bam"); echo "$subread_bams"
 	dataset create --force --type SubreadSet --name $prefix  ${prefix}.subreadset.xml $subread_bams
