@@ -20,15 +20,14 @@ module purge
 export PATH=~/anaconda2/bin:~/scripts/Isoseq3_workflow/shell_scripts:~/scripts/downloaded_software/cDNA_Cupcake/post_isoseq_cluster:$PATH #for ananconda, cDNA_cupcake, and custom flnc_report.py
 source activate anaconda2.7
 
-
 #define file locations
-CDNA_CUPCAKE="~/scripts/downloaded_software/cDNA_Cupcake"
+# CDNA_CUPCAKE="~/scripts/downloaded_software/cDNA_Cupcake"
 TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
-SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq"
+SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq/testing_set"
 cd $SCRATCH
 
 #define reference files
-manifest="~/scripts/Isoseq3_workflow/samples/Sample_ID_Map.csv" #same location from 00_manifest.sh
+manifest="/home/jlsmith3/scripts/Isoseq3_workflow/samples/Sample_ID_Map.csv" #same location from 00_manifest.sh
 
 #define samples
 hq_fq=$1 #eg hq_fq=test.polished.hq.fastq
@@ -39,17 +38,15 @@ collapse_isoforms_by_sam.py --input ${hq_fq} --fq \
    -s ${hq_fq}.srt.sam -c 0.99 -i 0.95 --dun-merge-5-shorter \
    -o ${prefix}.polished.hq.no5merge
 
-#Create cluster_report.csv for the combined polished.bams (?)
-# python $CDNA_CUPCAKE/post_isoseq_cluster/isoseq3_make_cluster_report.py ${prefix}.polished.bam
-
 #calculate abundance
 get_abundance_post_collapse.py ${prefix}.polished.hq.no5merge.collapsed  ${prefix}.polished.cluster_report.csv
 
 #Filter away 5' degraded isoforms
 filter_away_subset.py ${prefix}.polished.hq.no5merge.collapsed
 
-#create collapsed flnc.repor.csv where each pair of movies is defined its sample condition, and no longer by movie ID (eg m54228_181211_220100)
-6Z_hack_flnc_report.py "$PWD/${prefix}.flnc.report.csv" $prefix
+#create collapsed flnc.report.csv where each pair of movies is defined its sample condition, and no longer by movie ID (eg m54228_181211_220100)
+#This assumes flnc.report.csv is in the current working directoy.
+6__hack_flnc_report.py "$PWD/${prefix}.flnc.report.csv" $manifest $prefix
 
 #Run demultiplexing scripts
 classify_csv="$PWD/${prefix}.flnc.report.hacked.csv"
@@ -58,3 +55,7 @@ demux_isoseq_with_genome.py \
   --read_stat ${prefix}.polished.hq.no5merge.collapsed.read_stat.txt \
   --classify_csv $classify_csv \
   -o ${prefix}.polished.hq.no5merge.collapsed.filtered.mapped_fl_count.txt
+
+#Create demultiplexed GFF and FASTA/FASTQ files
+tuple=cat $manifest | cut -f 4 -d "," | grep -v "Sample_Number" | awk -v q="'" -v p="(" -v p2=")" '{print p q $1q","q$1 q p2}' | tr "\n"  "," | sed -E 's/^(.+),$/"\1"\n/'
+# demux_by_barcode_groups.py --pooled_fastx ${hq_fq} ${hq_fq}.srt.sam ${prefix}.polished.hq.no5merge.collapsed.filtered.mapped_fl_count.txt ${prefix}_demux  $tuple #"('AML','AML'),('NBM','NBM')"
