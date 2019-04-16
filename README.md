@@ -2,25 +2,35 @@
 
 This is a custom PacBio RNA sequencing workflow, which is a full-length RNA-seq methodology that can sequence transcripts ranging from 10 kb and up. 
 
-We have a total of 11 (10 AML, 1 Normal Bone Marrow) biological samples sequenced across 26 SMRT-cells.  There are 4 SMRT-cells for the noraml bone marrow (NBM) sample. Each AML sample is sequenced across 2 SMRT-cells (a large cDNA prep on 1 cell, and small cDNA prep on the 2nd cell).
+We have a total of 11 (10 AML, 1 Normal Bone Marrow) biological samples sequenced across 26 SMRT-cells.  There are 6 SMRT-cells for the noraml bone marrow (NBM) sample. Each AML sample is sequenced across 2 SMRT-cells (a large cDNA prep on 1 cell, and small cDNA prep on the 2nd cell).
 
 We used 96 barcoded oligonucleotides for the RT-PCR step during library preparation, to provide a means for PCR duplicate detection. Each SMRT-cell contains a single sample's library (not multiplexed by sample).
 
 
 ## General Workflow
 
-This workflow has been initially designed to be run using the SLURM job scheduler with an on-premise high performance compute cluster (HPC). 
+This workflow has been initially designed to be run using the SLURM job scheduler with an on-premise high performance compute cluster (HPC). The scripts are numbered sequentially for easier implementation and interpretation. 
 
 The next iteration will use Cromwell Workflow Management System to improve the efficiency and reprodicibility of the workflow. 
 
 ### IsoSeq3
+
+0. Create a manifest file of the raw subreads.bam. 
+    - The manifest file is required later on for mapping sample condition (eg control vs treated) to the movie IDs. 
+    - There is optionally a way to rename the subreads.bam files to the sample identifier used in the subreadset.xml
+    - requires R 3.5 and some R libraries (dplyr, magrittr, tidyr)
+
+```
+cd /path/to/raw/data/
+bash path/to/00_manifest.sh 
+```
 
 1. CCS (Circular Consensus Sequence) generation for each individual movie. 
 
 ```
 for bam in $(ls -1 *.subreads.bam) 
 do
-  sbatch Isoseq3_ccs_generation.sh $bam
+  sbatch 1_Isoseq3_ccs_generation.sh $bam
 done
 ```
 
@@ -41,8 +51,8 @@ done
 
 ```
 ccs_bams=$(ls *.ccs.bam)
-prefix="Test"
-sbatch Isoseq3_lima_primerRemoval.sh $ccs_bams barcodes.fasta $prefix 
+prefix="test"
+sbatch 2_Isoseq3_lima_primerRemoval.sh $ccs_bams barcodes.fasta $prefix 
 
 ```
 
@@ -51,15 +61,65 @@ sbatch Isoseq3_lima_primerRemoval.sh $ccs_bams barcodes.fasta $prefix
    - clustering is the initial isoform-level clustering of full-length reads. This is the step which requires more power for isoform detection and thus, why combining as many samples in the initial steps 2-5 were necessary. 
    - Iso-Seq 3 requires at least **two FLNC reads** to b clustered at the isoform level
    - The two reads must *A)* Differ less than 100 bp on the 5’ end, *B)*  Differ less than 30 bp on the 3’ end, and *c)* Have no internal gaps that exceed 10 bp to be clustered. 
+   - Input a flnc (full length non-concatemer) bam file and a string prefix that will identify the output files. This will produce 24 unpolished.bams for improve effeciency of step 7. 
 
+```
+flnc_bam="XXXX.flnc.bam"
+prefix="test"
+sbatch 3_Isoseq3_cluster_isoforms.sh $prefix $flnc_bam 
+```
+
+7. Polish the clustered isoforms using subreads from the original input movies. 
+    - polishing create a consensus sequence for each isoform using the raw data. 
+    - This step allows one to define the high quality transcripts that will be used for down-stream analyses. 
+    - There are two options for this workflow - use HPC or AWS Batch depending on the need. This is a computationally intensive step and may takes days to complete. 
+    - Using as many threads as possible may increase its speed, as well as ensuring you have the most recent version of Isoseq3 (commit v3.1.2). 
+    - The HPC script and AWS Batch script automatically creates an ARRAY job for the 24 unpolished.bams.
+
+```
+#Example 1 
+sbatch 4A_Isoseq3_polish_isoforms.sh 
+
+#Example 2
+BUCKET="s3://my-bucket"
+aws s3 cp upolished.bam_filenames.txt $BUCKET
+aws s3 cp 4B_isoseq3_polish_isoforms_batch.sh $BUCKET/my-scripts/
+aws batch submit-job file://submit_polish.json
+```
 
 ### Post-IsoSeq3 workflow
 
-1. Align the *hq-transcripts.fastq files with minimap2
-2. Sort/index the aligned BAM files 
-3. Use Cupcake ToFu to collapse the isoforms based on alignment coords
-4. Use Cupcake ToFu to Calculate abundance of non-redundant isoforms
+1. Align the hq-transcripts.fastq files with minimap2 
+  - This will concatentate the 24 high quality fastq (polished.hq.fastq) files  and the concatenated polished.hq.fastq is aligned to the reference genome and will demultiplex the isoform counts. 
+  - It will  Sort/index the aligned BAM files as well, requiring SAMtools and bedtools if desired. 
+  - The prefix string must be the same one used in the `isoseq3 cluster` step. 
+
+```
+prefix="test"
+sbatch  5_minimap2_Isoseq3.sh
+```
+  
+2. Use Cupcake ToFu to collapse the isoforms based on alignment coords and calculate abundance of non-redundant isoforms, and demultiplex the sample conditions (eg control vs treated). 
+  - This step will also filter out 5' degraded isoforms using cDNA cupcake. 
+  - It require the information from the manifest file to define sample conditions. 
+  - Cupcake Tofu should be up-to-date and make sure to use `git pull` on your cDNA_Cupcake repo periodically. May need to re-install and rebuild the scripts as well dependeing how out of date your repo is. 
+  
+```
+high_quality_fq="XXXX.hq.fastq"
+prefix="test"
+sbatch 6_cDNA_Cupcake_Abundance_Demux.sh 
+```
+
+3. Align the individual sample conditions high quality fastqs using minimap2. 
+  - This step will allow one to visualize the individual samples or conditions in IGV. 
+
+4. Detect Fusions using CDNA cupcake
+  - This is to check that the AML samples can have thier fusion gene identified through PacBio. 
+
 5. Run SQANTI2 using the unique transcripts from step #3 (*-hq_transcripts.collapsed.rep.fq)
+  - SQANTI2 is the first step to identifying novel isoforms. It will requrie agressive filtering steps 
+  - It also can optionally use STAR aligner junction files for short reads RNA-seq. 
+  - This workflow has illumina short read RNA-seq available for these samples and the star-aligner is used in this script. 
 
 
 ### Example Workflow (Liz)
