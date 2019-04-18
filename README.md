@@ -72,7 +72,7 @@ sbatch 3_Isoseq3_cluster_isoforms.sh $prefix $flnc_bam
 7. Polish the clustered isoforms using subreads from the original input movies. 
     - polishing create a consensus sequence for each isoform using the raw data. 
     - This step allows one to define the high quality transcripts that will be used for down-stream analyses. 
-    - There are two options for this workflow - use HPC or AWS Batch depending on the need. This is a computationally intensive step and may takes days to complete. 
+    - There are two options for this workflow - use HPC or AWS Batch depending on the need. This is a computationally intensive step and may takes days to complete running the polish algorithm. 
     - Using as many threads as possible may increase its speed, as well as ensuring you have the most recent version of Isoseq3 (commit v3.1.2). 
     - The HPC script and AWS Batch script automatically creates an ARRAY job for the 24 unpolished.bams.
 
@@ -89,20 +89,22 @@ aws batch submit-job file://submit_polish.json
 
 ### Post-IsoSeq3 workflow
 
-1. Align the hq-transcripts.fastq files with minimap2 
-  - This will concatentate the 24 high quality fastq (polished.hq.fastq) files  and the concatenated polished.hq.fastq is aligned to the reference genome and will demultiplex the isoform counts. 
-  - It will  Sort/index the aligned BAM files as well, requiring SAMtools and bedtools if desired. 
-  - The prefix string must be the same one used in the `isoseq3 cluster` step. 
+1. Align the high quality transcripts.fastq files with minimap2. 
+    - This will concatentate the 24 high quality fastq (polished.hq.fastq) files  and the concatenated polished.hq.fastq is aligned to the reference genome and will demultiplex the isoform counts. 
+    - It will  Sort/index the aligned BAM files as well, requiring SAMtools and BEDtools. 
+    - The prefix string must be the same one used in the `isoseq3 cluster` step. 
 
 ```
 prefix="test"
 sbatch  5_minimap2_Isoseq3.sh
 ```
   
-2. Use Cupcake ToFu to collapse the isoforms based on alignment coords and calculate abundance of non-redundant isoforms, and demultiplex the sample conditions (eg control vs treated). 
-  - This step will also filter out 5' degraded isoforms using cDNA cupcake. 
-  - It require the information from the manifest file to define sample conditions. 
-  - Cupcake Tofu should be up-to-date and make sure to use `git pull` on your cDNA_Cupcake repo periodically. May need to re-install and rebuild the scripts as well dependeing how out of date your repo is. 
+2. Collapse the isoforms based on alignment coords, calculate abundance of non-redundant isoforms, and demultiplex the sample conditions (eg control vs treated) using cDNA cupcake. 
+    - This step will also filter out 5' degraded isoforms using cDNA cupcake. 
+    - It requires the information from the manifest file to define sample conditions (see step 0). 
+    - The PacBio data will be demultiplexed to sample/condition level using the manifest information, and aligned using minimap2, to allow one to visualize the individual samples or conditions in IGV. 
+    - requires minimap2 and SAMtools to run. 
+    - Cupcake Tofu should also be up-to-date and make sure to use `git pull` on your cDNA_Cupcake repo periodically. May need to re-install and rebuild the scripts as well dependeing how out of date your repo is. 
   
 ```
 high_quality_fq="XXXX.hq.fastq"
@@ -110,13 +112,14 @@ prefix="test"
 sbatch 6_cDNA_Cupcake_Abundance_Demux.sh 
 ```
 
-3. Align the individual sample conditions high quality fastqs using minimap2. 
-  - This step will allow one to visualize the individual samples or conditions in IGV. 
+3. Detect [Fusions using CDNA cupcake](https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU%3A-supporting-scripts-for-Iso-Seq-after-clustering-step#fusion).
+  - This is to ensure that the AML samples can have thier fusion gene identified through PacBio RNA-seq for initial sample QC. 
 
-4. Detect Fusions using CDNA cupcake
-  - This is to check that the AML samples can have thier fusion gene identified through PacBio. 
+```
+sbatch 7_cDNA_Cupcake_Fusion_Genes.sh
+```
 
-5. Run SQANTI2 using the unique transcripts from step #3 (*-hq_transcripts.collapsed.rep.fq)
+4. Run SQANTI2 using the unique transcripts from step #3 (*-hq_transcripts.collapsed.rep.fq)
   - SQANTI2 is the first step to identifying novel isoforms. It will requrie agressive filtering steps 
   - It also can optionally use STAR aligner junction files for short reads RNA-seq. 
   - This workflow has illumina short read RNA-seq available for these samples and the star-aligner is used in this script. 
