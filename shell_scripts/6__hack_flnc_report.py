@@ -27,7 +27,7 @@ manifest['Dataset'].replace(regex=True, to_replace=".subreadset.xml", value='', 
 #Dictionary to hold the movie ID to Sample condition mappings.
 # d = {'m54228_181211_220100': 'NBM', 'm54228_181214_110428': 'NBM',
 #      'm54228_190201_161538': 'AML', 'm54247_190125_201139': 'AML'}
-d = manifest[['Dataset','Sample_Number']].set_index('Dataset').to_dict()['Sample_Number']
+d = manifest[['Dataset','Reg.']].set_index('Dataset').to_dict()['Reg.']
 
 #create a file called flnc.report.hacked.csv for the new collapsed cluster report.
 filename=os.path.dirname(args.flnc_report)+"/"+args.prefix+".flnc.report.hacked.csv"

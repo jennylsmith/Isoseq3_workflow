@@ -7,7 +7,8 @@
 
 
 #Example Usage:
-
+# cd /path/to/raw/data/
+# ./00_manifest.sh
 
 #set script to exit 1 if any of the following are not met.
 set -euo pipefail
@@ -39,7 +40,7 @@ do
 
     printf "$(dirname $file),$(basename $file),$reg\n" >> $OUTDIR/Sample_ID_Map.csv
 
-    #rename each file with the patient registration number
+    #rename each file with the patient registration number (original sample ID)
     #for res in $(ls -1 $(dirname $file)/*)
     #do
     #  mv -n $res ${reg}_$res
@@ -51,7 +52,7 @@ do
 done
 
 #Clean the sample manifest with TidyR
-Rscript $(dirname $0)/0A_clean_sample_manifest.r
+Rscript $(dirname $0)/0__clean_sample_manifest.r
 
 #remove the untidy version
 rm $OUTDIR/Sample_ID_Map.csv

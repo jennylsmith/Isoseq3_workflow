@@ -56,19 +56,18 @@ then
 	# ls -1 ${prefix}*.polished.bam > list
 	# bamtools merge -list list -out ${prefix}.polished.bam && rm list
 else
-	"unzipping the polished hq fastq"
+	printf "unzipping the polished hq fastq.\n"
 	gunzip $files
 fi
 
-printf "Starting alignment.\n"
-
 #Run alignment. Fastqs can be either gzipped or not in minimap2
+printf "Starting alignment.\n"
 sam=${prefix}.polished.hq.fastq.sam
 bam=${sam%.sam}.bam
 minimap2 -ax splice -t 16 -uf --secondary=no $genome ${prefix}.polished.hq.fastq* > $sam
 
 #sort and index Bam/Sam files
-sort -k 3,3 -k 4,4n  ${prefix}.polished.hq.fastq.sam > ${sam%.sam}.srt.sam
-samtools view -bS $sam > $bam
-samtools sort $bam > ${bam%.bam}.srt.bam
+printf "Sorting and Indexing.\n"
+sort -k 3,3 -k 4,4n  $sam > ${sam%.sam}.srt.sam
+samtools view -bS $sam | samtools sort -o ${bam%.bam}.srt.bam - && rm $sam
 samtools index ${bam%.bam}.srt.bam
