@@ -25,7 +25,7 @@
 
 ######## STEP 3 ###############
 #for cDNA_cupcake with python2.7.6:
-##You will need to periodically update cDNA_cupcake repo.
+##You will need to periodically update cDNA_cupcake repo. You will need to delete the previous version in site-packages, and bin in your env ("~/anaconda2/envs/anaconda2.7/")
 #https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU:-supporting-scripts-for-Iso-Seq-after-clustering-step#collapse
 # git clone https://github.com/Magdoll/cDNA_Cupcake.git
 # export PATH=~/anaconda2/bin:$PATH
@@ -33,4 +33,6 @@
 # cd cDNA_Cupcake
 # python setup.py build
 # python setup.py install
+# cd post_isoseq_cluster
+# rm demux_by_barcode_groups.py (there is a custom copy of this in my repo.)
 # Installed /home/jlsmith3/anaconda2/envs/anaconda2.7/lib/python2.7/site-packages/bx_python-0.7.3-py2.7-linux-x86_64.egg

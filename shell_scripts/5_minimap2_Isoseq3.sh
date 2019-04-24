@@ -50,7 +50,7 @@ then
 elif [[ $(echo $files | wc -w) -gt 1 ]]
 then
 	printf "Unzipping and cating the $(echo $files | wc -w) polished hq fastqs.\n"
-	cat ${prefix}*cluster_report.csv > ${prefix}.polished.cluster_report.csv
+	cat ${prefix}*cluster_report.csv | sort | uniq > ${prefix}.polished.cluster_report.csv #sort and uniq is to remove the extra header lines "cluster_id,read_id,read_type" from the individual files
 	zcat -v ${prefix}*.hq.fastq.gz > ${prefix}.polished.hq.fastq
 	# zcat -v ${prefix}*.lq.fastq.gz > ${prefix}.polished.lq.fastq
 	# ls -1 ${prefix}*.polished.bam > list
@@ -64,7 +64,7 @@ fi
 printf "Starting alignment.\n"
 sam=${prefix}.polished.hq.fastq.sam
 bam=${sam%.sam}.bam
-minimap2 -ax splice -t 16 -uf --secondary=no $genome ${prefix}.polished.hq.fastq* > $sam
+minimap2 -ax splice -t 16 -uf --secondary=no $genome ${prefix}.polished.hq.fastq > $sam
 
 #sort and index Bam/Sam files
 printf "Sorting and Indexing.\n"

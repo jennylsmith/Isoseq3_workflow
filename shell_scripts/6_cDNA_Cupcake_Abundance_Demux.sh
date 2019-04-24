@@ -12,14 +12,14 @@ source /app/Lmod/lmod/lmod/init/bash
 ################################
 
 #Jenny Smith
-#cDNA Cupcake Collapse Isoforms and count isoforms from Isoseq3 workflow
+#cDNA Cupcake Collapse Isoforms and count isoforms from Isoseq3 workflow and demultiplex the pooled Samples.
 
 
 #EXAMPLE USAGE
-#hq_fq="test.polished.hq.fastq"
-#flnc_report="test.flnc.report.csv"
+#hq_fq="$PWD/test.polished.hq.fastq"
+#flnc_report="$PWD/test.flnc.report.csv"
 #prefix="test"
-#sbatch 6_cDNA_Cupcake_Abundance_Demux.sh
+#sbatch 6_cDNA_Cupcake_Abundance_Demux.sh $hq_fq $flnc_report $prefix
 
 #set script to exit 1 if any of the following are not met.
 set -euo pipefail
@@ -32,19 +32,17 @@ ml SAMtools/1.9-foss-2016b
 source activate anaconda2.7
 
 #define file locations
-# CDNA_CUPCAKE="~/scripts/downloaded_software/cDNA_Cupcake"
 TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
-SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq/testing_set"
+SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq"
 cd $SCRATCH
 
 #define reference files
-# genome="$TARGET/Reference_Data/GRCh38/minimap2_idx/Gencode_GRCh38.primary_assembly.genome.mmi"
-# manifest="~/scripts/Isoseq3_workflow/samples/Sample_ID_Map.csv" #same location from 00_manifest.sh
-manifest="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq/testing_set/manifest.test.csv"
-genome="hg38_noalt.fa"
-#define samples
+genome="$TARGET/Reference_Data/GRCh38/minimap2_idx/Gencode_GRCh38.primary_assembly.genome.mmi"
+manifest="/home/jlsmith3/scripts/Isoseq3_workflow/samples/Sample_ID_Map.csv" #same location from 00_manifest.sh
+
+#define samples (NTE:requires full file paths)
 hq_fq=$1 #eg $PWD/test.polished.hq.fastq
-flnc_report=$2 #eg $PWD/test.flnc.report.csv (requires full file path)
+flnc_report=$2 #eg $PWD/test.flnc.report.csv
 prefix=${3:-"ccs_combined"} #same prefix as used in  3_Isoseq3_cluster_isoforms.sh, 4A/B_isoseq3_polish_isoforms.sh , and 5_minimap2_Isoseq3.sh
 
 #Collapse Reads
@@ -53,7 +51,7 @@ collapse_isoforms_by_sam.py --input ${hq_fq} --fq -s ${hq_fq}.srt.sam -c 0.99 -i
 
 #calculate abundance
 printf "Calculating isoform abundance.\n"
-get_abundance_post_collapse.py ${prefix}.polished.hq.no5merge.collapsed  ${prefix}.polished.cluster_report.csv
+get_abundance_post_collapse.py ${prefix}.polished.hq.no5merge.collapsed ${prefix}.polished.cluster_report.csv
 
 #Filter away 5' degraded isoforms
 filter_away_subset.py ${prefix}.polished.hq.no5merge.collapsed
@@ -69,7 +67,7 @@ demux_isoseq_with_genome.py \
   --classify_csv ${prefix}.flnc.report.hacked.csv \
   -o ${prefix}.polished.hq.no5merge.collapsed.filtered.mapped_fl_count.txt
 
-#Use minimap2 to create a pooled sam file from the pooled fastq
+# # #Use minimap2 to create a pooled sam file from the pooled fastq
 sam=${prefix}.polished.hq.no5merge.collapsed.filtered.rep.fq.sam
 minimap2 -ax splice -t 4 -uf --secondary=no $genome ${prefix}.polished.hq.no5merge.collapsed.filtered.rep.fq > $sam
 
@@ -81,9 +79,10 @@ demux_by_barcode_groups.py --pooled_fastx ${sam%.sam} $sam ${prefix}.polished.hq
 #align, Sort and index the demuxed individual files
 for file in $(ls -1 ${prefix}_demux*fastq)
 do
-   printf "Starting to map $file.\n"
+   printf "Starting to align $file.\n"
    minimap2 -ax splice -t 4 -uf --secondary=no $genome $file | samtools view -bS - | samtools sort -o ${file%.fastq}.srt.bam -
-   # sort -k 3,3 -k 4,4n  ${file%.fastq}.sam > ${file%.fastq}.srt.sam #&& rm ${file%.fastq}.sam
-   # samtools view -bS ${file%.fastq}.sam | samtools sort -o ${file%.fastq}.srt.bam -
    samtools index ${file%.fastq}.srt.bam
 done
+
+# sort -k 3,3 -k 4,4n  ${file%.fastq}.sam > ${file%.fastq}.srt.sam #&& rm ${file%.fastq}.sam
+# samtools view -bS ${file%.fastq}.sam | samtools sort -o ${file%.fastq}.srt.bam -
