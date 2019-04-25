@@ -1,5 +1,4 @@
 FROM ubuntu:16.04
-## aws, curl, git, unzip, python and python3   are already installed in fredhutch/ubuntu
 # https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/Tutorial:-Installing-and-Running-Iso-Seq-3-using-Conda
 # http://www.science.smith.edu/dftwiki/index.php/Tutorial:_Docker_Anaconda_Python_--_4
 

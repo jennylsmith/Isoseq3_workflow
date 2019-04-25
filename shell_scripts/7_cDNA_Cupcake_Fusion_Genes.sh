@@ -14,6 +14,11 @@ source /app/Lmod/lmod/lmod/init/bash
 #Jenny Smith
 #cDNA Cupcake Collapse Isoforms and count isoforms from Isoseq3 workflow
 
+#EXAMPLE USAGE:
+
+
+#set script to exit 1 if any of the following are not met.
+set -euo pipefail
 
 #Load Modules/define paths. Using python2.7 in virtual enviornment "anaconda2.7"
 module purge
@@ -25,27 +30,24 @@ source activate anaconda2.7
 
 #define file locations
 TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
-SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq/testing_set"
+SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq"
 cd $SCRATCH
-
-#define reference files
-hacked_rep="test.flnc.report.hacked.csv" #from 6_cDNA_Cupcake_Abundance_Demux.sh
-genome="hg38_noalt.fa"
 
 #define samples
 hq_fq=$1 #eg test.polished.hq.fastq
-cluster_rep=$2 #eg. test.polished.cluster_report.csv
-prefix=${3:-"ccs_combined"} #same prefix as used in  3_Isoseq3_cluster_isoforms.sh, 4A/B_isoseq3_polish_isoforms.sh , and 5_minimap2_Isoseq3.sh
+prefix=${2:-"ccs_combined"} #same prefix as used in  3_Isoseq3_cluster_isoforms.sh, 4A/B_isoseq3_polish_isoforms.sh , and 5_minimap2_Isoseq3.sh
 
-#Run fusion detection algorithm
-fusion_finder.py --input $hq_fq --fq -s ${hq_fq}.srt.sam \
-  -o ${prefix}_isoforms.fasta.fusion \
-  --cluster_report_csv $cluster_rep
+# #Run fusion detection algorithm
+# printf "Running fusion dection step.\n"
+# fusion_finder.py --input $hq_fq --fq -s ${hq_fq}.srt.sam \
+#   -o ${prefix}_isoforms.fasta.fusion \
+#   --cluster_report_csv ${prefix}.polished.cluster_report.csv
 
 #Filter away 5' degraded isoforms
 # filter_away_subset.py ${prefix}_isoforms.fasta.fusion
 
 #Run demultiplexing scripts
+# --classify_csv file created from 6_cDNA_Cupcake_Abundance_Demux.sh
 printf "Demultiplexing by sample condition.\n"
 demux_isoseq_no_genome.py --hq_fastq ${prefix}_isoforms.fasta.fusion.rep.fq \
     --cluster_csv ${prefix}.polished.cluster_report.csv \

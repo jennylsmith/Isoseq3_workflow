@@ -1,5 +1,5 @@
 {
-    "jobName": "All_Combined_0",
+    "jobName": "All_Combined",
     "jobQueue": "highmem",
     "jobDefinition": "isoseq3-polish:3",
     "arrayProperties":{
