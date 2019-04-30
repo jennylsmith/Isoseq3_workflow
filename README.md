@@ -107,23 +107,53 @@ sbatch  5_minimap2_Isoseq3.sh
     - Cupcake Tofu should also be up-to-date and make sure to use `git pull` on your cDNA_Cupcake repo periodically. May need to re-install and rebuild the scripts as well dependeing how out of date your repo is. 
   
 ```
-high_quality_fq="XXXX.hq.fastq"
+hq_fq="test.hq.fastq"
+flnc_report="test.flnc.report.csv"
 prefix="test"
-sbatch 6_cDNA_Cupcake_Abundance_Demux.sh 
+sbatch 6_cDNA_Cupcake_Abundance_Demux.sh $hq_fq $flnc_report $prefix
 ```
 
 3. Detect [Fusions using CDNA cupcake](https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU%3A-supporting-scripts-for-Iso-Seq-after-clustering-step#fusion).
-  - This is to ensure that the AML samples can have thier fusion gene identified through PacBio RNA-seq for initial sample QC. 
+     - This is to ensure that the AML samples can have thier fusion gene identified through PacBio RNA-seq for initial sample QC. 
+     - Input is the concatenated pooled (multiplexed) high quality fastq output from the initial `polish` step. 
+     - The chimeric reads (fusions) are then demultiplexed with `no_genome` script and finally, separated into sample level fusion fasta files. 
+     - _NOTE:_ It produces empty GFF files, since I modified the original code and will need to clean that up later. 
+     - The criteria for fusions are (taken directly from Liz's description) 
+        1. Map to two or more separate loci 
+        2. Each mapped locus must align at least 5% of the transcript 
+        3. The combined alignment coverage (over all mapped loci) must be at least 99%
+        4. Each mapped locus is at least 10 kb apart 
 
 ```
-sbatch 7_cDNA_Cupcake_Fusion_Genes.sh
+hq_fq=test.polished.hq.fastq
+prefix="test"
+sbatch 7_cDNA_Cupcake_Fusion_Genes.sh $hq_fq $prefix 
 ```
 
 4. Run SQANTI2 using the unique transcripts from step #3 (*-hq_transcripts.collapsed.rep.fq)
-  - SQANTI2 is the first step to identifying novel isoforms. It will requrie agressive filtering steps 
-  - It also can optionally use STAR aligner junction files for short reads RNA-seq. 
-  - This workflow has illumina short read RNA-seq available for these samples and the star-aligner is used in this script. 
+    - SQANTI2 is the first step to identifying novel isoforms. It will requrie agressive filtering steps 
+    - It also can optionally use STAR aligner junction files for short reads RNA-seq. 
+    - This workflow has illumina short read RNA-seq available for these samples and the star-aligner is used in this script, and the short-read fastqs are stored on S3. So this script can be modified easily if needed. This is an _array job_ so you will need to specify the # of samples in the array. 
+    - SQANTI2 can utilize a number of accessory files, which we have access to including:
+        - kallisto quantification abundances 
+        - full lenghth demuxed pacbio read counts 
+        - STAR junction files 
+    - Kallisto counts were produced using https://github.com/FredHutch/batch_pipeline  
 
+```
+#optional STAR junctions
+r1=$(ls -1 *.r1.fastq)
+r2=$(ls -1 *.r2.fastq)
+printf "$r1 $r2\n" > fastq_files_for_star.txt 
+sbatch 8_STAR_Junctions_ShortReads.sh fastq_files_for_star.txt
+
+#run SQANTI2 (please ensure all sample file text files are in the same order so samples are not mixed up).
+ls -1 test_demux_*_only.fastq > hq_fqs.txt 
+ls -1 *SJ.out.tab > juncs.txt 
+ls -1 *abundance.txt > kallisto.txt 
+
+sbatch hq_fqs.txt juncs.txt kallisto.txt test.polished.hq.no5merge.collapsed.filtered.mapped_fl_count.txt
+```
 
 ### Example Workflow (Liz)
 
