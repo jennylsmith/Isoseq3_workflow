@@ -1,0 +1,11 @@
+PAWSBW-09A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAWSBW-09A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+RO02297-09A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz RO02297-09A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+PAUMIH-09A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAUMIH-09A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+PAVAVV-09A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAVAVV-09A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+PAWSWU-03A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAWSWU-03A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+PAUMJB-09A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAUMJB-09A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+PAUSMT-09A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAUSMT-09A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+PAWWEE-09A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAWWEE-09A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+PAVESI-03A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAVESI-03A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+PAXLXJ-09A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAXLXJ-09A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
+PAVKXE-03A-01R_withJunctionsOnGenome_dupsFlagged_r1.fq.gz PAVKXE-03A-01R_withJunctionsOnGenome_dupsFlagged_r2.fq.gz 
