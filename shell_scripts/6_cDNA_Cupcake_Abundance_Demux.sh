@@ -83,6 +83,3 @@ do
    minimap2 -ax splice -t 4 -uf --secondary=no $genome $file | samtools view -bS - | samtools sort -o ${file%.fastq}.srt.bam -
    samtools index ${file%.fastq}.srt.bam
 done
-
-# sort -k 3,3 -k 4,4n  ${file%.fastq}.sam > ${file%.fastq}.srt.sam #&& rm ${file%.fastq}.sam
-# samtools view -bS ${file%.fastq}.sam | samtools sort -o ${file%.fastq}.srt.bam -

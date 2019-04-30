@@ -33,18 +33,18 @@ TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
 SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq"
 cd $SCRATCH
 
+#define Reference files
+manifest="/home/jlsmith3/scripts/Isoseq3_workflow/samples/Sample_ID_Map.csv" #same location from 00_manifest.sh
+
 #define samples
 hq_fq=$1 #eg test.polished.hq.fastq
 prefix=${2:-"ccs_combined"} #same prefix as used in  3_Isoseq3_cluster_isoforms.sh, 4A/B_isoseq3_polish_isoforms.sh , and 5_minimap2_Isoseq3.sh
 
-# #Run fusion detection algorithm
-# printf "Running fusion dection step.\n"
-# fusion_finder.py --input $hq_fq --fq -s ${hq_fq}.srt.sam \
-#   -o ${prefix}_isoforms.fasta.fusion \
-#   --cluster_report_csv ${prefix}.polished.cluster_report.csv
-
-#Filter away 5' degraded isoforms
-# filter_away_subset.py ${prefix}_isoforms.fasta.fusion
+#Run fusion detection algorithm
+printf "Running fusion dection step.\n"
+fusion_finder.py --input $hq_fq --fq -s ${hq_fq}.srt.sam \
+  -o ${prefix}_isoforms.fasta.fusion \
+  --cluster_report_csv ${prefix}.polished.cluster_report.csv
 
 #Run demultiplexing scripts
 # --classify_csv file created from 6_cDNA_Cupcake_Abundance_Demux.sh
@@ -54,19 +54,15 @@ demux_isoseq_no_genome.py --hq_fastq ${prefix}_isoforms.fasta.fusion.rep.fq \
     --classify_csv ${prefix}.flnc.report.hacked.csv \
     -o ${prefix}_isoforms.fusion.fl_count.txt
 
-#Use minimap2 to create a pooled sam file from the pooled fastq
+#Use Picard to create an unaligned pooled sam file from the pooled fastq.
+#in future, should re-work script to just use the fasta input.
 sam=${prefix}_isoforms.fasta.fusion.rep.fq.sam
 java -jar $EBROOTPICARD/picard.jar FastqToSam FASTQ=${prefix}_isoforms.fasta.fusion.rep.fq O=$sam READ_GROUP_NAME=PBfusion SAMPLE_NAME=Pooled PLATFORM=PacBio
 
 #Create demultiplexed GFF and FASTA/FASTQ files
 printf "Creating sample level GFF, Fastqs, and BAM files.\n"
 tuple=$(cat $manifest | cut -f 3 -d "," | grep -v "Reg." | sort | uniq | awk -v q="'" -v p="(" -v p2=")" '{print p q $1 q "," q $1 q p2}' | tr "\n"  "," | sed -E 's/^(.+),$/"\1"\n/')
-demux_by_barcode_groups_fusion.py --pooled_fastx ${sam%.sam} $sam ${prefix}_isoforms.fusion.fl_count.txt ${prefix}_fusion_demux  $tuple
+demux_by_barcode_groups_fusion.py --pooled_fastx ${sam%.sam} $sam ${prefix}_isoforms.fusion.fl_count.txt ${prefix}_fusion_demux $tuple && rm $sam
 
-#align, Sort and index the demuxed individual files
-# for file in $(ls -1 ${prefix}_demux*fastq)
-# do
-#      printf "Starting to map $file."
-#      minimap2 -ax splice -t 4 -uf --secondary=no $genome $file | samtools view -bS - | samtools sort -o ${file%.fastq}.srt.bam -
-#      samtools index ${file%.fastq}.srt.bam
-# done
+#Remove the empty GFF files. At some point this needs to either not output GFFs, or grab code from fusion_finder.py to create a GFF
+ rm ${prefix}_fusion_demux*gff

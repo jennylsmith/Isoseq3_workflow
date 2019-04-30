@@ -25,7 +25,7 @@ set -euo pipefail
 module purge
 export PATH=~/scripts/opt/bin:$PATH #for minimap2
 ml SAMtools/1.8-foss-2016b
-ml BEDTools/2.27.1-foss-2016b
+ml BamTools/2.4.1-foss-2016b
 
 #define file locations
 DELETE90="/fh/scratch/delete90/meshinchi_s/jlsmith3"
@@ -52,9 +52,9 @@ then
 	printf "Unzipping and cating the $(echo $files | wc -w) polished hq fastqs.\n"
 	cat ${prefix}*cluster_report.csv | sort | uniq > ${prefix}.polished.cluster_report.csv #sort and uniq is to remove the extra header lines "cluster_id,read_id,read_type" from the individual files
 	zcat -v ${prefix}*.hq.fastq.gz > ${prefix}.polished.hq.fastq
-	# zcat -v ${prefix}*.lq.fastq.gz > ${prefix}.polished.lq.fastq
-	# ls -1 ${prefix}*.polished.bam > list
-	# bamtools merge -list list -out ${prefix}.polished.bam && rm list
+	zcat -v ${prefix}*.lq.fastq.gz > ${prefix}.polished.lq.fastq
+	ls -1 ${prefix}*.polished.bam > list
+	bamtools merge -list list -out ${prefix}.polished.bam && rm list
 else
 	printf "unzipping the polished hq fastq.\n"
 	gunzip $files
