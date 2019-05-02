@@ -42,7 +42,7 @@ def regroup_sam_to_gff(pooled_sam, demux_count_file, output_prefix, out_group_di
     handles = {}
     handles_fafq = {}
     for g in out_group_dict.itervalues():
-        handles[g] = open("{o}_{g}_only.gff".format(o=output_prefix, g=g), 'w')
+        # handles[g] = open("{o}_{g}_only.gff".format(o=output_prefix, g=g), 'w')
         if in_fafq is not None: handles_fafq[g] = open("{o}_{g}_only.{t}".format(o=output_prefix, g=g, t=type_fafq), 'w')
 
     if in_fafq is not None:
@@ -64,7 +64,6 @@ def regroup_sam_to_gff(pooled_sam, demux_count_file, output_prefix, out_group_di
         for g in groups_to_write_in:
             # GFF.write_collapseGFF_format(handles[g], r)
             if in_fafq is not None:
-                # print(g)
                 SeqIO.write(fafq_dict[pbid], handles_fafq[g], type_fafq)
 
 
