@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --array=1-11
-#SBATCH --partition=largenode
+#SBATCH --partition=campus
 #SBATCH -n 1
-#SBATCH -c 8
-#SBATCH --mem=56G
+#SBATCH -c 4
+#SBATCH --mem=30G
 #SBATCH -o sqanti2-%A_%a.out
 #SBATCH -e sqanti2-%A_%a.stderr
 #SBATCH -t 7-00:00:00
@@ -37,7 +37,7 @@ TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
 SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq"
 cd $SCRATCH
 
-#Need only Once: Download the CAGE peaks and ployA junctions references
+#Need only Once: Download the CAGE peaks, ployA, and intropolis junctions references
 # curl -L https://github.com/Magdoll/images_public/raw/master/SQANTI2_support_data/intropolis.v1.hg19_with_liftover_to_hg38.tsv.min_count_10.modified.gz | gunzip -c > intropolis.v1.hg19_with_liftover_to_hg38.tsv.min_count_10.modified.bed
 # curl -L https://github.com/Magdoll/images_public/raw/master/SQANTI2_support_data/hg38.cage_peak_phase1and2combined_coord.bed.gz | gunzip -c > hg38.cage_peak_phase1and2combined_coord.bed
 # curl -LO https://raw.githubusercontent.com/Magdoll/images_public/master/SQANTI2_support_data/human.polyA.list.txt
@@ -64,7 +64,7 @@ sqanti_isoforms (){
 	samp=${fq%.fastq}
 	mkdir -p $SCRATCH/${samp}/junction_refs
 	cp -n $junc $SCRATCH/${samp}/junction_refs/${junc}.bed #rename to SJ.tab to bed file
-	ln -s $JUNCS $SCRATCH/${samp}/junction_refs #symlink to reference
+	ln -s $JUNCS $SCRATCH/${samp}/junction_refs #symlink to intropolis reference
 
 	#Run sqanti_qc.py
 	sqanti_qc2.py $fq $GTF $GENOME -t 8 \
@@ -79,8 +79,8 @@ sqanti_isoforms (){
 	#Ensure filter results go in the same output directory
 	cd $SCRATCH/${samp}/
 
-	#run sqanti_filter.py (missing interpreter in pyhton script)
-	python $(which sqanti_filter.py) -a 0.8 -c 1 \
+	#run sqanti_filter.py (missing interpreter in pyhton script, hence full path required)
+	python $(which sqanti_filter2.py) -a 0.8 -c 1 \
 		$SCRATCH/$samp/${samp}_classification.txt \
 		$SCRATCH/$samp/${samp}.renamed_corrected.fasta \
 		$SCRATCH/$samp/${samp}.renamed_corrected.sam 2> $SCRATCH/${samp}/${samp}_filter.log
