@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --array=1-11
-#SBATCH --partition=campus
+#SBATCH --array=1-1
+#SBATCH --partition=largenode
 #SBATCH -n 1
-#SBATCH -c 4
-#SBATCH --mem=30G
+#SBATCH -c 16
+#SBATCH --mem=80G
 #SBATCH --output=star-%A_%a.out
 #SBATCH -t 7-00:00:00
 #SBATCH --mail-type=END,FAIL
@@ -16,8 +16,8 @@ source /app/Lmod/lmod/lmod/init/bash
 #The genome index for STAR was run previously, as it is only required to create this once.
 
 #EXAMPLE USAGE:
-#ls -1 *r1.fastqs | awk '{print $1 $1}' | awk '{gsub("_r1","_r2",$2)}' > samples_for_star.txt
-#sbatch 8__STAR_Junctions_ShortReads.sh
+#ls -1 *r1.* | awk '{print $1" "$1}' | awk '{gsub("_r1","_r2",$2); print}' > samples_for_star.txt
+#sbatch 8__STAR_Junctions_ShortReads.sh samples_for_star.txt
 
 #set script to exit 1 if any of the following are not met.
 set -euo pipefail
@@ -30,7 +30,7 @@ ml awscli/1.16.122-foss-2016b-Python-2.7.15
 #Define file locations
 BUCKET="s3://fh-pi-meshinchi-s"
 TARGET="/fh/fast/meshinchi_s/workingDir/TARGET"
-SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/SMRTseq/STAR"
+SCRATCH="/fh/scratch/delete90/meshinchi_s/jlsmith3/CBL/FASTQs"
 cd $SCRATCH
 
 #define Reference files
@@ -42,6 +42,7 @@ genomeDir="$TARGET/Reference_Data/GRCh38/STAR_idx"
 
 #Samples
 sample_list=$1 #text file with 2 columns. 1 for read 1 fastq, 2 for read 2 fastq with no header.
+
 
 #Define function for STAR
 run_star() {
@@ -61,6 +62,8 @@ run_star() {
 		--readFilesCommand zcat \
 		--outFileNamePrefix ${samp}_ \
 		--outSAMtype BAM SortedByCoordinate \
+		--limitBAMsortRAM 63004036730 \
+		--outSAMattributes NH HI NM MD AS nM jM jI XS \
 		--chimSegmentMin 25 \
 		--chimJunctionOverhangMin 20 \
 		--chimOutType WithinBAM \

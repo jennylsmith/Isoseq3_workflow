@@ -15,7 +15,8 @@
 # conda install -n anaconda2.7 -c bioconda pbcoretools # for manipulating PacBio datasets
 # conda install -n anaconda2.7 -c bioconda bamtools    # for converting BAM to fasta
 # conda install -n anaconda2.7 -c bioconda pysam       # for making CSV
-
+#conda install -n anaCogent3 -c bioconda ucsc-gtftogenepred openssl=1.0
+#conda install -n anaCogent3 -c bioconda gffread
 
 ############## STEP 2 ################
 #download precompiled binaries for minimap2
@@ -34,5 +35,4 @@
 # cd cDNA_Cupcake
 # python setup.py build
 # python setup.py install
-# cd post_isoseq_cluster; rm demux_by_barcode_groups.py (there is a custom copy of this in my repo.)
-# Installed /home/jlsmith3/anaconda2/envs/anaconda2.7/lib/python2.7/site-packages/bx_python-0.7.3-py2.7-linux-x86_64.egg
+# cd post_isoseq_cluster; rm demux_by_barcode_groups.py demux_by_barcode_groups_fusion.py (there is a custom copy of this in my repo.)
