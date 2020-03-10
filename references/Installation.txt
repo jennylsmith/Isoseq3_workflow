@@ -11,7 +11,8 @@
 # source activate anaconda2.7
 # conda install -n anaconda2.7 biopython
 # conda install -n anaconda2.7 -c http://conda.anaconda.org/cgat bx-python
-# conda install -n anaconda2.7 -c bioconda isoseq3
+# conda install -n anaconda2.7 -c bioconda isoseq3=3.2 pbccs=4.2 lima=1.11
+
 # conda install -n anaconda2.7 -c bioconda pbcoretools # for manipulating PacBio datasets
 # conda install -n anaconda2.7 -c bioconda bamtools    # for converting BAM to fasta
 # conda install -n anaconda2.7 -c bioconda pysam       # for making CSV
