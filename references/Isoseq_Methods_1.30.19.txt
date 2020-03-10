@@ -1,0 +1,11 @@
+#Jenny Smith
+#1/30/19
+
+#Isoseq3 workflow methods
+- polyA library preparation from total RNA
+- ccs version
+- lima version
+- isoseq3 version
+- minimap2 version
+- cDNA_Cupcake version
+- STAR-aligner version

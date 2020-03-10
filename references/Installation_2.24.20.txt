@@ -1,0 +1,51 @@
+############ STEP 1 #################
+# Setup Ananconda
+# https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/Tutorial:-Installing-and-Running-Iso-Seq-3-using-Conda
+
+ module purge
+ ./Anaconda3-2019.12-Linux-x86_64.sh
+ conda -V
+ conda update conda
+
+ conda create -n isoseq3 python=2.7 anaconda
+ conda activate isoseq3
+ conda install -n isoseq3 biopython
+ conda install -n isoseq3 -c http://conda.anaconda.org/cgat bx-python
+ conda install -n isoseq3 -c bioconda isoseq3=3.3 pbccs=4.2 lima=1.11
+
+ conda install -n isoseq3 -c bioconda pbcommand pbcoretools pbcore # for manipulating PacBio datasets
+ conda install -n isoseq3 -c bioconda bamtools    # for converting BAM to fasta
+ conda install -n isoseq3 -c bioconda pysam       # for making CSV
+ conda install -n isoseq3 -c bioconda ucsc-gtftogenepred openssl=1.0
+ conda install -n isoseq3 -c bioconda gffread
+ conda deactivate
+
+####### STEP 2 ###############
+#Need to switch to anaconda3 python3 environemet (base) and install pbcore
+#this is to use the `dataset` command
+conda create -n pacbio_py3 'python>=3.7' 'pysam >= 0.15.1' 'numpy >= 1.17' 'biopython >= 1.74' avro-python3=1.9.0 iso8601 pytz requests
+conda activate pacbio_py3
+pip install https://github.com/PacificBiosciences/pbcore/archive/develop.zip
+pip install https://github.com/PacificBiosciences/pbcommand/archive/develop.zip
+pip install https://github.com/PacificBiosciences/pbcoretools/archive/develop.zip
+
+
+############## STEP 3 ################
+#download precompiled binaries for minimap2
+ conda install -n isoseq3 -c bioconda minimap2=2.17
+
+
+
+######## STEP 4 ###############
+#for cDNA_cupcake with python2.7.6:
+##You will need to periodically update cDNA_cupcake repo.
+##You will need to delete the previous version in site-packages, and bin in your env ("~/anaconda2/envs/isoseq3/")
+##Since a file is removed must do `git git reset --hard origin/master && git pull` to add new updates
+#https://github.com/Magdoll/cDNA_Cupcake/wiki/Cupcake-ToFU:-supporting-scripts-for-Iso-Seq-after-clustering-step#collapse
+# git clone https://github.com/Magdoll/cDNA_Cupcake.git
+# export PATH=~/anaconda2/bin:$PATH
+# source activate isoseq3
+# cd cDNA_Cupcake
+# python setup.py build
+# python setup.py install
+# cd post_isoseq_cluster; rm demux_by_barcode_groups.py demux_by_barcode_groups_fusion.py (there is a custom copy of this in my repo.)

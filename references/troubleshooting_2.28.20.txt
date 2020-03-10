@@ -1,0 +1,151 @@
+Singularity u14.simg:~> source local/miniconda3/etc/profile.d/conda.sh
+Singularity u14.simg:~> lsb_release -d
+Description:    Ubuntu 14.04.6 LTS
+Singularity u14.simg:~> rm -r testP3
+Singularity u14.simg:~> conda config --show channels
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+Singularity u14.simg:~> conda create -n testP3 'python>=3.7' 'pysam >= 0.15.1' 'numpy >= 1.17' 'biopython >= 1.74' avro-python3 iso8601 pytz requests
+Collecting package metadata (current_repodata.json): done
+Solving environment: done
+==> WARNING: A newer version of conda exists. <==
+  current version: 4.7.12
+  latest version: 4.8.2
+Please update conda by running
+    $ conda update -n base -c defaults conda
+## Package Plan ##
+  environment location: /home/mjhsieh/local/miniconda3/envs/testP3
+  added / updated specs:
+    - avro-python3
+    - biopython[version='>=1.74']
+    - iso8601
+    - numpy[version='>=1.17']
+    - pysam[version='>=0.15.1']
+    - python[version='>=3.7']
+    - pytz
+    - requests
+The following NEW packages will be INSTALLED:
+  _libgcc_mutex      conda-forge/linux-64::_libgcc_mutex-0.1-conda_forge
+  _openmp_mutex      conda-forge/linux-64::_openmp_mutex-4.5-1_llvm
+  avro-python3       bioconda/noarch::avro-python3-1.9.0-py37_0
+  biopython          conda-forge/linux-64::biopython-1.76-py37h516909a_0
+  bzip2              conda-forge/linux-64::bzip2-1.0.8-h516909a_2
+  ca-certificates    conda-forge/linux-64::ca-certificates-2019.11.28-hecc5488_0
+  certifi            conda-forge/linux-64::certifi-2019.11.28-py37_0
+  cffi               conda-forge/linux-64::cffi-1.13.2-py37h8022711_0
+  chardet            conda-forge/linux-64::chardet-3.0.4-py37_1003
+  cryptography       conda-forge/linux-64::cryptography-2.8-py37h72c5cf5_1
+  curl               conda-forge/linux-64::curl-7.68.0-hf8cf82a_0
+  idna               conda-forge/noarch::idna-2.9-py_1
+  iso8601            conda-forge/noarch::iso8601-0.1.12-py_1
+  krb5               conda-forge/linux-64::krb5-1.16.4-h2fd8d38_0
+  ld_impl_linux-64   conda-forge/linux-64::ld_impl_linux-64-2.33.1-h53a641e_8
+  libblas            conda-forge/linux-64::libblas-3.8.0-15_openblas
+  libcblas           conda-forge/linux-64::libcblas-3.8.0-15_openblas
+  libcurl            conda-forge/linux-64::libcurl-7.68.0-hda55be3_0
+  libdeflate         conda-forge/linux-64::libdeflate-1.5-h516909a_0
+  libedit            conda-forge/linux-64::libedit-3.1.20170329-hf8c457e_1001
+  libffi             conda-forge/linux-64::libffi-3.2.1-he1b5a44_1006
+  libgcc-ng          conda-forge/linux-64::libgcc-ng-9.2.0-h24d8f2e_2
+  libgfortran-ng     conda-forge/linux-64::libgfortran-ng-7.3.0-hdf63c60_5
+  liblapack          conda-forge/linux-64::liblapack-3.8.0-15_openblas
+  libopenblas        conda-forge/linux-64::libopenblas-0.3.8-h5ec1e0e_0
+  libssh2            conda-forge/linux-64::libssh2-1.8.2-h22169c7_2
+  libstdcxx-ng       conda-forge/linux-64::libstdcxx-ng-9.2.0-hdf63c60_2
+  llvm-openmp        conda-forge/linux-64::llvm-openmp-9.0.1-hc9558a2_2
+  ncurses            conda-forge/linux-64::ncurses-6.1-hf484d3e_1002
+  numpy              conda-forge/linux-64::numpy-1.18.1-py37h95a1406_0
+  openssl            conda-forge/linux-64::openssl-1.1.1d-h516909a_0
+  pip                conda-forge/noarch::pip-20.0.2-py_2
+  pycparser          conda-forge/noarch::pycparser-2.19-py_2
+  pyopenssl          conda-forge/noarch::pyopenssl-19.1.0-py_1
+  pysam              bioconda/linux-64::pysam-0.15.4-py37hbcae180_0
+  pysocks            conda-forge/linux-64::pysocks-1.7.1-py37_0
+  python             conda-forge/linux-64::python-3.7.6-h357f687_2
+  pytz               conda-forge/noarch::pytz-2019.3-py_0
+  readline           conda-forge/linux-64::readline-8.0-hf8c457e_0
+  requests           conda-forge/linux-64::requests-2.23.0-py37_0
+  setuptools         conda-forge/linux-64::setuptools-45.2.0-py37_0
+  six                conda-forge/linux-64::six-1.14.0-py37_0
+  sqlite             conda-forge/linux-64::sqlite-3.30.1-hcee41ef_0
+  tk                 conda-forge/linux-64::tk-8.6.10-hed695b0_0
+  urllib3            conda-forge/linux-64::urllib3-1.25.7-py37_0
+  wheel              conda-forge/noarch::wheel-0.34.2-py_1
+  xz                 conda-forge/linux-64::xz-5.2.4-h14c3975_1001
+  zlib               conda-forge/linux-64::zlib-1.2.11-h516909a_1006
+Proceed ([y]/n)? y
+Preparing transaction: done
+Verifying transaction: done
+Executing transaction: done
+#
+# To activate this environment, use
+#
+#     $ conda activate testP3
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+Singularity u14.simg:~> conda activate testP3
+(testP3) Singularity u14.simg:~> pip install https://github.com/PacificBiosciences/pbcore/archive/develop.zip
+Collecting https://github.com/PacificBiosciences/pbcore/archive/develop.zip
+  Using cached https://github.com/PacificBiosciences/pbcore/archive/develop.zip
+Requirement already satisfied: biopython>=1.74 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcore==2.0.1) (1.76)
+Requirement already satisfied: numpy>=1.17 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcore==2.0.1) (1.18.1)
+Requirement already satisfied: pysam>=0.15.1 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcore==2.0.1) (0.15.4)
+Building wheels for collected packages: pbcore
+  Building wheel for pbcore (setup.py) ... done
+  Created wheel for pbcore: filename=pbcore-2.0.1-py3-none-any.whl size=2974833 sha256=12b37957a31cd93608d8cffb6ed508a35afec87f583f08dfc21b9ab946dcb3
+79
+  Stored in directory: /tmp/pip-ephem-wheel-cache-ippgq9d8/wheels/35/d8/13/f8f5dc69e0d8c55b0e007193d641eff3e74ad486108e125642
+Successfully built pbcore
+Installing collected packages: pbcore
+Successfully installed pbcore-2.0.1
+(testP3) Singularity u14.simg:~> pip install https://github.com/PacificBiosciences/pbcommand/archive/develop.zip
+Collecting https://github.com/PacificBiosciences/pbcommand/archive/develop.zip
+  Using cached https://github.com/PacificBiosciences/pbcommand/archive/develop.zip
+Requirement already satisfied: avro-python3 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcommand==2.0.0) (1.9.0)
+Requirement already satisfied: iso8601 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcommand==2.0.0) (0.1.12)
+Requirement already satisfied: pytz in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcommand==2.0.0) (2019.3)
+Requirement already satisfied: requests in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcommand==2.0.0) (2.23.0)
+Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from requests->
+pbcommand==2.0.0) (1.25.7)
+Requirement already satisfied: idna<3,>=2.5 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from requests->pbcommand==2.0.0) (2.9)
+Requirement already satisfied: certifi>=2017.4.17 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from requests->pbcommand==2.0.0) (20
+19.11.28)
+Requirement already satisfied: chardet<4,>=3.0.2 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from requests->pbcommand==2.0.0) (3.0
+.4)
+Building wheels for collected packages: pbcommand
+  Building wheel for pbcommand (setup.py) ... done
+  Created wheel for pbcommand: filename=pbcommand-2.0.0-py3-none-any.whl size=88789 sha256=ad406f2c6f85d2dfc8ea8fe72bd6c877b4b81bb36f6f505a8a60346249
+35ba98
+  Stored in directory: /tmp/pip-ephem-wheel-cache-x5axotln/wheels/45/5f/ae/e88b43e7b1b62140571f13a2f6ff029bb073bc194f14093504
+Successfully built pbcommand
+Installing collected packages: pbcommand
+Successfully installed pbcommand-2.0.0
+(testP3) Singularity u14.simg:~> pip install https://github.com/PacificBiosciences/pbcoretools/archive/develop.zip
+Collecting https://github.com/PacificBiosciences/pbcoretools/archive/develop.zip
+  Using cached https://github.com/PacificBiosciences/pbcoretools/archive/develop.zip
+Requirement already satisfied: numpy>=1.17 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcoretools==0.7.1) (1.18.1)
+Requirement already satisfied: pysam>=0.15.1 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcoretools==0.7.1) (0.15.4)
+Requirement already satisfied: pbcore>=2.0.0 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcoretools==0.7.1) (2.0.1)
+Requirement already satisfied: pbcommand>=2.0.0 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcoretools==0.7.1) (2.0.0)
+Requirement already satisfied: biopython>=1.74 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcore>=2.0.0->pbcoretools==0.7.1) (1.76)
+Requirement already satisfied: requests in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcommand>=2.0.0->pbcoretools==0.7.1) (2.23.0)
+Requirement already satisfied: avro-python3 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcommand>=2.0.0->pbcoretools==0.7.1) (1.9.0)
+Requirement already satisfied: pytz in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcommand>=2.0.0->pbcoretools==0.7.1) (2019.3)
+Requirement already satisfied: iso8601 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from pbcommand>=2.0.0->pbcoretools==0.7.1) (0.1.12)
+Requirement already satisfied: urllib3!=1.25.0,!=1.25.1,<1.26,>=1.21.1 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from requests->pbcommand>=2.0.0->pbcoretools==0.7.1) (1.25.7)
+Requirement already satisfied: certifi>=2017.4.17 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from requests->pbcommand>=2.0.0->pbcoretools==0.7.1) (2019.11.28)
+Requirement already satisfied: idna<3,>=2.5 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from requests->pbcommand>=2.0.0->pbcoretools==0.7.1) (2.9)
+Requirement already satisfied: chardet<4,>=3.0.2 in ./local/miniconda3/envs/testP3/lib/python3.7/site-packages (from requests->pbcommand>=2.0.0->pbcoretools==0.7.1) (3.0.4)
+Building wheels for collected packages: pbcoretools
+  Building wheel for pbcoretools (setup.py) ... done
+  Created wheel for pbcoretools: filename=pbcoretools-0.7.1-py3-none-any.whl size=91161 sha256=fdad25cff54696aada9c8b76a95f18b7298fd204f23f83e741ab0c16da224fe3
+  Stored in directory: /tmp/pip-ephem-wheel-cache-pyaryv5q/wheels/31/f3/d8/a408a8dc9c4298a71ad9da1ce59a11c0e57e2f90871eb2c3e5
+Successfully built pbcoretools
+Installing collected packages: pbcoretools
+Successfully installed pbcoretools-0.7.1
+(testP3) Singularity u14.simg:~> dataset --version
+0.7.1
